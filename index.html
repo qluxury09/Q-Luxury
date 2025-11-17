@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>متجر بسيط</title>
+  <style>
+    body { font-family: sans-serif; background:#f2f2f2; padding:20px; }
+    .product { background:#fff; padding:15px; margin-bottom:15px; border-radius:10px; }
+    .btn { background:#000; color:#fff; padding:10px 15px; border:none; border-radius:8px; cursor:pointer; }
+    .form-box { background:#fff; padding:20px; border-radius:10px; }
+    input, select, textarea { width:100%; margin:8px 0; padding:10px; border-radius:6px; border:1px solid #ccc; }
+  </style>
+</head>
+<body>
+
+  <h2>المنتجات</h2>
+
+<button class="btn" onclick="showAddForm()">إضافة منتج جديد</button>
+
+<div id="addForm" style="display:none; margin-top:20px;" class="form-box">
+  <h3>إضافة منتج</h3>
+  <label>اسم المنتج</label>
+  <input id="newName" type="text" placeholder="اسم المنتج" />
+
+  <label>السعر</label>
+  <input id="newPrice" type="number" placeholder="السعر" />
+
+  <label>الوصف</label>
+  <textarea id="newDesc" placeholder="الوصف"></textarea>
+
+  <label>صور المنتج</label>
+  <input id="newImages" type="file" accept="image/*" multiple />
+
+  <button class="btn" onclick="saveProduct()">حفظ المنتج</button>
+</div>
+
+<div id="productsContainer"></div>()">إضافة منتج جديد</button>
+
+<div id="productsContainer"></div>
+
+<div id="formPage" style="display:none;">
+    <h2>إتمام الطلب</h2>
+    <div class="form-box">
+      <p id="prodName"></p>
+      <p id="prodPrice"></p>
+
+      <label>المنطقة</label>
+      <select id="zone" onchange="updateShipping()">
+        <option value="">اختر المنطقة</option>
+        <option value="القدس" data-ship="20">القدس (+20₪)</option>
+        <option value="الضفة" data-ship="15">الضفة (+15₪)</option>
+        <option value="الداخل" data-ship="25">الداخل (+25₪)</option>
+      </select>
+
+      <label>المنطقة بالتفصيل</label>
+      <input id="details" type="text" placeholder="مثال: رام الله - الإرسال" />
+
+      <label>الاسم الكامل</label>
+      <input id="fullname" type="text" />
+
+      <label>رقم الهاتف</label>
+      <input id="phone" type="text" />
+
+      <label>ملاحظات (اختياري)</label>
+      <textarea id="notes"></textarea>
+
+      <h3 id="total"></h3>
+
+      <button class="btn" onclick="sendWhatsApp()">إرسال الطلب على واتساب</button>
+    </div>
+  </div>
+
+  <script>
+    let selectedProduct = {};
+
+    function buy(name, price) {
+      selectedProduct = { name, price, shipping:0 };
+      document.querySelector('body').scrollTop = 0;
+      document.getElementById('prodName').innerText = 'المنتج: ' + name;
+      document.getElementById('prodPrice').innerText = 'السعر: ' + price + '₪';
+      document.getElementById('formPage').style.display = 'block';
+      document.getElementById('total').innerText = '';
+    }
+
+    function updateShipping() {
+      const zone = document.getElementById('zone');
+      const ship = zone.options[zone.selectedIndex].dataset.ship;
+      selectedProduct.shipping = Number(ship);
+      document.getElementById('total').innerText = 'المجموع الكلي: ' + (selectedProduct.price + selectedProduct.shipping) + '₪';
+    }
+
+    function sendWhatsApp() {
+      let name = selectedProduct.name;
+      let price = selectedProduct.price;
+      let zone = document.getElementById('zone').value;
+      let details = document.getElementById('details').value;
+      let fullname = document.getElementById('fullname').value;
+      let phone = document.getElementById('phone').value;
+      let notes = document.getElementById('notes').value;
+
+      let total = price + selectedProduct.shipping;
+
+      let msg = `طلب جديد:%0A------------------%0Aالمنتج: ${name}%0Aالسعر: ${price}₪%0Aالمنطقة: ${zone}%0Aتفاصيل المنطقة: ${details}%0Aالاسم الكامل: ${fullname}%0Aالهاتف: ${phone}%0Aملاحظات: ${notes}%0Aالمجموع الكلي: ${total}₪`;
+
+      let phoneNumber = "00970595479161"; // ضع رقمك هنا
+
+      window.open(`https://wa.me/${phoneNumber}?text=${msg}`);
+    }
+    function showAddForm() {
+    document.getElementById('addForm').style.display = 'block';
+  }
+
+  function saveProduct() {
+    let name = document.getElementById('newName').value;
+    let price = document.getElementById('newPrice').value;
+    let desc = document.getElementById('newDesc').value;
+    let images = document.getElementById('newImages').files;
+
+    if (!name || !price || images.length === 0) {
+      alert('يجب إدخال اسم المنتج والسعر وإرفاق صورة على الأقل');
+      return;
+    }
+
+    let productBox = document.createElement('div');
+    productBox.className = 'product';
+
+    let imgsHTML = '';
+    for (let i = 0; i < images.length; i++) {
+      let url = URL.createObjectURL(images[i]);
+      imgsHTML += `<img src="${url}" style="width:120px; margin:5px; border-radius:10px;">`;
+    }
+
+    productBox.innerHTML = `
+      <h3>${name}</h3>
+      <p>السعر: ${price}₪</p>
+      <p>${desc}</p>
+      <div>${imgsHTML}</div>
+      <button class="btn" onclick="buy('${name}', ${price})">شراء الآن</button>
+    `;
+
+    document.getElementById('productsContainer').appendChild(productBox);
+    document.getElementById('addForm').style.display = 'none';
+
+    document.getElementById('newName').value = '';
+    document.getElementById('newPrice').value = '';
+    document.getElementById('newDesc').value = '';
+    document.getElementById('newImages').value = '';
+  }
+
+</script>
+
+</body>
+</html>
