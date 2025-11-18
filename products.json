@@ -1,0 +1,14 @@
+[
+  {
+    "name": "ساعة ذكية",
+    "price": "100",
+    "desc": "ساعة مقاومة للماء",
+    "img": "images/watch.jpg"
+  },
+  {
+    "name": "سماعات بلوتوث",
+    "price": "60",
+    "desc": "جودة صوت ممتازة",
+    "img": "images/airpods.jpg"
+  }
+]
