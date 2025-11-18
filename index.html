@@ -1,240 +1,156 @@
+<!-- Full HTML site with product management, protected add/delete, localStorage persistence -->
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>متجر بسيط</title>
-  <style>
-    body { font-family: sans-serif; background:#f2f2f2; padding:20px; }
-    .product { background:#fff; padding:15px; margin-bottom:15px; border-radius:10px; }
-    .btn { background:#000; color:#fff; padding:10px 15px; border:none; border-radius:8px; cursor:pointer; }
-    .form-box { background:#fff; padding:20px; border-radius:10px; }
-    input, select, textarea { width:100%; margin:8px 0; padding:10px; border-radius:6px; border:1px solid #ccc; }
-  </style>
+<meta charset="UTF-8" />
+<title>متجر بسيط</title>
+<style>
+body { font-family: sans-serif; padding:20px; background:#f2f2f2; }
+#adminBtn { padding:10px 20px; background:black; color:white; border:none; cursor:pointer; margin-bottom:20px; }
+#productForm, #orderPage { display:none; background:white; padding:20px; border-radius:10px; margin-top:20px; }
+.product { background:white; padding:10px; border-radius:10px; margin-bottom:15px; }
+.product img { width:140px; border-radius:8px; }
+button { cursor:pointer; }
+.deleteBtn { background:red; color:white; border:none; padding:5px 10px; margin-top:5px; display:none; }
+.addToCartBtn, .buyNowBtn { background:#008cff; color:white; border:none; padding:7px 12px; margin:3px; }
+</style>
 </head>
 <body>
 
-  <h2>المنتجات</h2>
+<button id="adminBtn">🔒 الدخول كمدير</button>
 
-  <!-- زر دخول الإدارة -->
-  <button class="btn" onclick="askPassword()">🔒 دخول الإدارة</button>
+<div id="productForm">
+<h3>إضافة منتج جديد</h3>
+<input type="text" id="pName" placeholder="اسم المنتج"><br><br>
+<input type="number" id="pPrice" placeholder="السعر"><br><br>
+<textarea id="pDesc" placeholder="الوصف"></textarea><br><br>
+<input type="file" id="pImage" accept="image/*"><br><br>
+<button onclick="saveProduct()">حفظ المنتج</button>
+</div>
 
-  <!-- يظهر فقط بعد إدخال كلمة السر -->
-  <div id="adminButtons" style="display:none;">
-      <button class="btn" onclick="showAddForm()">إضافة منتج جديد</button>
-  </div>
+<h2>المنتجات</h2>
+<div id="products"></div>
 
-  <!-- فورم إضافة منتج -->
-  <div id="addForm" style="display:none; margin-top:20px;" class="form-box">
-    <h3>إضافة منتج</h3>
-    <label>اسم المنتج</label>
-    <input id="newName" type="text" placeholder="اسم المنتج" />
-
-    <label>السعر</label>
-    <input id="newPrice" type="number" placeholder="السعر" />
-
-    <label>الوصف</label>
-    <textarea id="newDesc" placeholder="الوصف"></textarea>
-
-    <label>صور المنتج</label>
-    <input id="newImages" type="file" accept="image/*" multiple />
-
-    <button class="btn" onclick="saveProduct()">حفظ المنتج</button>
-  </div>
-
-  <div id="productsContainer"></div>
-
-  <!-- صفحة تعبئة الطلب -->
-  <div id="formPage" style="display:none;">
-      <h2>إتمام الطلب</h2>
-      <div class="form-box">
-        <p id="prodName"></p>
-        <p id="prodPrice"></p>
-
-        <label>المنطقة</label>
-        <select id="zone" onchange="updateShipping()">
-          <option value="">اختر المنطقة</option>
-          <option value="القدس" data-ship="20">القدس (+20₪)</option>
-          <option value="الضفة" data-ship="15">الضفة (+15₪)</option>
-          <option value="الداخل" data-ship="25">الداخل (+25₪)</option>
-        </select>
-
-        <label>المنطقة بالتفصيل</label>
-        <input id="details" type="text" placeholder="مثال: رام الله - الإرسال" />
-
-        <label>الاسم الكامل</label>
-        <input id="fullname" type="text" />
-
-        <label>رقم الهاتف</label>
-        <input id="phone" type="text" />
-
-        <label>ملاحظات (اختياري)</label>
-        <textarea id="notes"></textarea>
-
-        <h3 id="total"></h3>
-
-        <button class="btn" onclick="sendWhatsApp()">إرسال الطلب على واتساب</button>
-      </div>
-    </div>
+<div id="orderPage">
+<h3>إتمام الطلب</h3>
+<label>المنطقة:</label>
+<select id="region" onchange="updateShipping()">
+<option value="none">اختر المنطقة</option>
+<option value="jerusalem">القدس</option>
+<option value="westbank">الضفة</option>
+<option value="inside48">الداخل</option>
+</select>
+<br><br>
+<label>العنوان بالتفصيل:</label><br>
+<input type="text" id="address"><br><br>
+<label>رقم الهاتف:</label><br>
+<input type="text" id="phone"><br><br>
+<label>الاسم الكامل:</label><br>
+<input type="text" id="fullname"><br><br>
+<label>ملاحظات:</label><br>
+<textarea id="notes"></textarea><br><br>
+<h4 id="totalPrice"></h4>
+<button onclick="sendOrder()">إرسال الطلب عبر واتساب</button>
+</div>
 
 <script>
+let adminMode = false;
+let password = "qais.islam.2009.2025";
+let shippingPrices = { jerusalem:30, westbank:20, inside48:70 };
+let cart = [];
 
-/* ---------------------------------------------------
-   كلمة سر المدير
-----------------------------------------------------*/
-function askPassword() {
-    let pass = prompt("أدخل كلمة السر للدخول للإدارة:");
-
-    if (pass === "qadmin123") {
-        document.getElementById("adminButtons").style.display = "block";
-        document.querySelector('button[onclick="askPassword()"]').style.display = "none";
-        alert("تم تسجيل الدخول كمدير ✔");
-    } else {
-        alert("كلمة السر خاطئة ❌");
-    }
-}
-
-/* ---------------------------------------------------
-   تخزين وجلب المنتجات من LocalStorage
-----------------------------------------------------*/
-
-function getProducts() {
-    return JSON.parse(localStorage.getItem("products")) || [];
-}
-
-function saveProductsToStorage(products) {
-    localStorage.setItem("products", JSON.stringify(products));
-}
-
-/* ---------------------------------------------------
-   عرض المنتجات
-----------------------------------------------------*/
-
-function displayProducts() {
-    let products = getProducts();
-    let container = document.getElementById("productsContainer");
-    container.innerHTML = "";
-
-    products.forEach((p, index) => {
-        let imagesHTML = "";
-        p.images.forEach(img => {
-            imagesHTML += `<img src="${img}" style="width:120px; margin:5px; border-radius:10px;">`;
-        });
-
-        container.innerHTML += `
-            <div class="product">
-                <h3>${p.name}</h3>
-                <p>السعر: ${p.price}₪</p>
-                <p>${p.desc}</p>
-                <div>${imagesHTML}</div>
-                <button class="btn" onclick="buy('${p.name}', ${p.price})">شراء الآن</button>
-            </div>
-        `;
-    });
-}
-
-/* ---------------------------------------------------
-   إضافة منتج جديد
-----------------------------------------------------*/
-
-function showAddForm() {
-  document.getElementById('addForm').style.display = 'block';
+function loadProducts() {
+ let list = JSON.parse(localStorage.getItem("products") || "[]");
+ let box = document.getElementById("products");
+ box.innerHTML = "";
+ list.forEach((p,i)=>{
+  let div = document.createElement("div");
+  div.className = "product";
+  div.innerHTML = `
+   <img src="${p.img}"><br>
+   <h3>${p.name}</h3>
+   <p>${p.desc}</p>
+   <p><b>${p.price} شيكل</b></p>
+   <button class="addToCartBtn" onclick="addToCart(${i})">إضافة للسلة</button>
+   <button class="buyNowBtn" onclick="directBuy(${i})">شراء الآن</button>
+   <button class="deleteBtn" id="del${i}" onclick="deleteProduct(${i})">حذف المنتج</button>
+  `;
+  box.appendChild(div);
+  if(adminMode) document.getElementById(`del${i}`).style.display = "block";
+ });
 }
 
 function saveProduct() {
-  let name = document.getElementById('newName').value;
-  let price = document.getElementById('newPrice').value;
-  let desc = document.getElementById('newDesc').value;
-  let files = document.getElementById('newImages').files;
-
-  if (!name || !price || files.length === 0) {
-    alert("يرجى إدخال اسم المنتج والسعر وصورة واحدة على الأقل");
-    return;
-  }
-
-  let imagesBase64 = [];
-  let loaded = 0;
-
-  for (let i = 0; i < files.length; i++) {
-      let reader = new FileReader();
-      reader.onload = function(e) {
-          imagesBase64.push(e.target.result);
-          loaded++;
-
-          if (loaded === files.length) {
-              let products = getProducts();
-
-              products.push({
-                  name: name,
-                  price: Number(price),
-                  desc: desc,
-                  images: imagesBase64
-              });
-
-              saveProductsToStorage(products);
-              displayProducts();
-          }
-      };
-      reader.readAsDataURL(files[i]);
-  }
-
-  document.getElementById("addForm").style.display = "none";
-
-  document.getElementById('newName').value = "";
-  document.getElementById('newPrice').value = "";
-  document.getElementById('newDesc').value = "";
-  document.getElementById('newImages').value = "";
+ let name = document.getElementById("pName").value;
+ let price = document.getElementById("pPrice").value;
+ let desc = document.getElementById("pDesc").value;
+ let imgFile = document.getElementById("pImage").files[0];
+ if(!name || !price || !imgFile) return alert("يرجى تعبئة كل الحقول الأساسية");
+ let reader = new FileReader();
+ reader.onload = ()=>{
+  let list = JSON.parse(localStorage.getItem("products") || "[]");
+  list.push({name,price,desc,img:reader.result});
+  localStorage.setItem("products", JSON.stringify(list));
+  loadProducts();
+ };
+ reader.readAsDataURL(imgFile);
 }
 
-/* ---------------------------------------------------
-   صفحة الشراء
-----------------------------------------------------*/
-
-let selectedProduct = {};
-
-function buy(name, price) {
-  selectedProduct = { name, price, shipping:0 };
-  document.getElementById('prodName').innerText = 'المنتج: ' + name;
-  document.getElementById('prodPrice').innerText = 'السعر: ' + price + '₪';
-  document.getElementById('formPage').style.display = 'block';
+function deleteProduct(i){
+ let list = JSON.parse(localStorage.getItem("products") || "[]");
+ list.splice(i,1);
+ localStorage.setItem("products", JSON.stringify(list));
+ loadProducts();
 }
 
-function updateShipping() {
-  let zone = document.getElementById('zone');
-  let ship = zone.options[zone.selectedIndex].dataset.ship;
-  selectedProduct.shipping = Number(ship);
-  document.getElementById('total').innerText =
-      'المجموع الكلي: ' + (selectedProduct.price + selectedProduct.shipping) + '₪';
+function addToCart(i){
+ let list = JSON.parse(localStorage.getItem("products") || "[]");
+ cart.push(list[i]);
+ alert("تمت إضافة المنتج للسلة");
 }
 
-function sendWhatsApp() {
-  let name = selectedProduct.name;
-  let price = selectedProduct.price;
-  let zone = document.getElementById('zone').value;
-  let details = document.getElementById('details').value;
-  let fullname = document.getElementById('fullname').value;
-  let phone = document.getElementById('phone').value;
-  let notes = document.getElementById('notes').value;
-  
-  let total = price + selectedProduct.shipping;
-
-  let msg =
-`طلب جديد:
-------------------
-المنتج: ${name}
-السعر: ${price}₪
-المنطقة: ${zone}
-تفاصيل المنطقة: ${details}
-الاسم الكامل: ${fullname}
-الهاتف: ${phone}
-ملاحظات: ${notes}
-المجموع الكلي: ${total}₪`;
-
-  window.open(`https://wa.me/00970595479161?text=${encodeURIComponent(msg)}`);
+function directBuy(i){
+ let list = JSON.parse(localStorage.getItem("products") || "[]");
+ cart = [list[i]];
+ openOrderPage();
 }
 
-displayProducts();
+function openOrderPage(){
+ document.getElementById("orderPage").style.display = "block";
+ updateTotal();
+}
+function updateShipping(){ updateTotal(); }
+function updateTotal(){
+ let sum = cart.reduce((a,b)=>a+Number(b.price),0);
+ let r = document.getElementById("region").value;
+ if(r!="none") sum += shippingPrices[r];
+ document.getElementById("totalPrice").innerHTML = "المجموع: "+sum+" شيكل";
+}
 
+function sendOrder(){
+ let regionTxt = document.getElementById("region").value;
+ let address = document.getElementById("address").value;
+ let phone = document.getElementById("phone").value;
+ let fullname = document.getElementById("fullname").value;
+ let notes = document.getElementById("notes").value;
+ if(regionTxt=="none" || !address || !phone || !fullname) return alert("يرجى تعبئة كل الحقول");
+ let prodList = cart.map(p=>`- ${p.name} (${p.price} شيكل)`).join("\n");
+ let msg = `طلب جديد:%0Aالاسم: ${fullname}%0Aالمنطقة: ${regionTxt}%0Aالعنوان: ${address}%0A
+الهاتف: ${phone}%0Aالمنتجات:%0A${prodList}%0Aملاحظات: ${notes}`;
+ window.open(`https://wa.me/00970595479161?text=${msg}`);
+}
+
+// Admin login
+adminBtn.onclick = ()=>{
+ let x = prompt("أدخل كلمة السر:");
+ if(x === password){
+  adminMode = true;
+  document.getElementById("productForm").style.display = "block";
+  loadProducts();
+ } else alert("خطأ");
+};
+
+loadProducts();
 </script>
 
 </body>
