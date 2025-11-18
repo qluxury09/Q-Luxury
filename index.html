@@ -16,137 +16,224 @@
 
   <h2>المنتجات</h2>
 
-<button class="btn" onclick="showAddForm()">إضافة منتج جديد</button>
+  <!-- زر دخول الإدارة -->
+  <button class="btn" onclick="askPassword()">🔒 دخول الإدارة</button>
 
-<div id="addForm" style="display:none; margin-top:20px;" class="form-box">
-  <h3>إضافة منتج</h3>
-  <label>اسم المنتج</label>
-  <input id="newName" type="text" placeholder="اسم المنتج" />
-
-  <label>السعر</label>
-  <input id="newPrice" type="number" placeholder="السعر" />
-
-  <label>الوصف</label>
-  <textarea id="newDesc" placeholder="الوصف"></textarea>
-
-  <label>صور المنتج</label>
-  <input id="newImages" type="file" accept="image/*" multiple />
-
-  <button class="btn" onclick="saveProduct()">حفظ المنتج</button>
-</div>
-
-<div id="productsContainer"></div>()">إضافة منتج جديد</button>
-
-<div id="productsContainer"></div>
-
-<div id="formPage" style="display:none;">
-    <h2>إتمام الطلب</h2>
-    <div class="form-box">
-      <p id="prodName"></p>
-      <p id="prodPrice"></p>
-
-      <label>المنطقة</label>
-      <select id="zone" onchange="updateShipping()">
-        <option value="">اختر المنطقة</option>
-        <option value="القدس" data-ship="20">القدس (+20₪)</option>
-        <option value="الضفة" data-ship="15">الضفة (+15₪)</option>
-        <option value="الداخل" data-ship="25">الداخل (+25₪)</option>
-      </select>
-
-      <label>المنطقة بالتفصيل</label>
-      <input id="details" type="text" placeholder="مثال: رام الله - الإرسال" />
-
-      <label>الاسم الكامل</label>
-      <input id="fullname" type="text" />
-
-      <label>رقم الهاتف</label>
-      <input id="phone" type="text" />
-
-      <label>ملاحظات (اختياري)</label>
-      <textarea id="notes"></textarea>
-
-      <h3 id="total"></h3>
-
-      <button class="btn" onclick="sendWhatsApp()">إرسال الطلب على واتساب</button>
-    </div>
+  <!-- يظهر فقط بعد إدخال كلمة السر -->
+  <div id="adminButtons" style="display:none;">
+      <button class="btn" onclick="showAddForm()">إضافة منتج جديد</button>
   </div>
 
-  <script>
-    let selectedProduct = {};
+  <!-- فورم إضافة منتج -->
+  <div id="addForm" style="display:none; margin-top:20px;" class="form-box">
+    <h3>إضافة منتج</h3>
+    <label>اسم المنتج</label>
+    <input id="newName" type="text" placeholder="اسم المنتج" />
 
-    function buy(name, price) {
-      selectedProduct = { name, price, shipping:0 };
-      document.querySelector('body').scrollTop = 0;
-      document.getElementById('prodName').innerText = 'المنتج: ' + name;
-      document.getElementById('prodPrice').innerText = 'السعر: ' + price + '₪';
-      document.getElementById('formPage').style.display = 'block';
-      document.getElementById('total').innerText = '';
+    <label>السعر</label>
+    <input id="newPrice" type="number" placeholder="السعر" />
+
+    <label>الوصف</label>
+    <textarea id="newDesc" placeholder="الوصف"></textarea>
+
+    <label>صور المنتج</label>
+    <input id="newImages" type="file" accept="image/*" multiple />
+
+    <button class="btn" onclick="saveProduct()">حفظ المنتج</button>
+  </div>
+
+  <div id="productsContainer"></div>
+
+  <!-- صفحة تعبئة الطلب -->
+  <div id="formPage" style="display:none;">
+      <h2>إتمام الطلب</h2>
+      <div class="form-box">
+        <p id="prodName"></p>
+        <p id="prodPrice"></p>
+
+        <label>المنطقة</label>
+        <select id="zone" onchange="updateShipping()">
+          <option value="">اختر المنطقة</option>
+          <option value="القدس" data-ship="20">القدس (+20₪)</option>
+          <option value="الضفة" data-ship="15">الضفة (+15₪)</option>
+          <option value="الداخل" data-ship="25">الداخل (+25₪)</option>
+        </select>
+
+        <label>المنطقة بالتفصيل</label>
+        <input id="details" type="text" placeholder="مثال: رام الله - الإرسال" />
+
+        <label>الاسم الكامل</label>
+        <input id="fullname" type="text" />
+
+        <label>رقم الهاتف</label>
+        <input id="phone" type="text" />
+
+        <label>ملاحظات (اختياري)</label>
+        <textarea id="notes"></textarea>
+
+        <h3 id="total"></h3>
+
+        <button class="btn" onclick="sendWhatsApp()">إرسال الطلب على واتساب</button>
+      </div>
+    </div>
+
+<script>
+
+/* ---------------------------------------------------
+   كلمة سر المدير
+----------------------------------------------------*/
+function askPassword() {
+    let pass = prompt("أدخل كلمة السر للدخول للإدارة:");
+
+    if (pass === "qadmin123") {
+        document.getElementById("adminButtons").style.display = "block";
+        document.querySelector('button[onclick="askPassword()"]').style.display = "none";
+        alert("تم تسجيل الدخول كمدير ✔");
+    } else {
+        alert("كلمة السر خاطئة ❌");
     }
+}
 
-    function updateShipping() {
-      const zone = document.getElementById('zone');
-      const ship = zone.options[zone.selectedIndex].dataset.ship;
-      selectedProduct.shipping = Number(ship);
-      document.getElementById('total').innerText = 'المجموع الكلي: ' + (selectedProduct.price + selectedProduct.shipping) + '₪';
-    }
+/* ---------------------------------------------------
+   تخزين وجلب المنتجات من LocalStorage
+----------------------------------------------------*/
 
-    function sendWhatsApp() {
-      let name = selectedProduct.name;
-      let price = selectedProduct.price;
-      let zone = document.getElementById('zone').value;
-      let details = document.getElementById('details').value;
-      let fullname = document.getElementById('fullname').value;
-      let phone = document.getElementById('phone').value;
-      let notes = document.getElementById('notes').value;
+function getProducts() {
+    return JSON.parse(localStorage.getItem("products")) || [];
+}
 
-      let total = price + selectedProduct.shipping;
+function saveProductsToStorage(products) {
+    localStorage.setItem("products", JSON.stringify(products));
+}
 
-      let msg = `طلب جديد:%0A------------------%0Aالمنتج: ${name}%0Aالسعر: ${price}₪%0Aالمنطقة: ${zone}%0Aتفاصيل المنطقة: ${details}%0Aالاسم الكامل: ${fullname}%0Aالهاتف: ${phone}%0Aملاحظات: ${notes}%0Aالمجموع الكلي: ${total}₪`;
+/* ---------------------------------------------------
+   عرض المنتجات
+----------------------------------------------------*/
 
-      let phoneNumber = "00970595479161"; // ضع رقمك هنا
+function displayProducts() {
+    let products = getProducts();
+    let container = document.getElementById("productsContainer");
+    container.innerHTML = "";
 
-      window.open(`https://wa.me/${phoneNumber}?text=${msg}`);
-    }
-    function showAddForm() {
-    document.getElementById('addForm').style.display = 'block';
+    products.forEach((p, index) => {
+        let imagesHTML = "";
+        p.images.forEach(img => {
+            imagesHTML += `<img src="${img}" style="width:120px; margin:5px; border-radius:10px;">`;
+        });
+
+        container.innerHTML += `
+            <div class="product">
+                <h3>${p.name}</h3>
+                <p>السعر: ${p.price}₪</p>
+                <p>${p.desc}</p>
+                <div>${imagesHTML}</div>
+                <button class="btn" onclick="buy('${p.name}', ${p.price})">شراء الآن</button>
+            </div>
+        `;
+    });
+}
+
+/* ---------------------------------------------------
+   إضافة منتج جديد
+----------------------------------------------------*/
+
+function showAddForm() {
+  document.getElementById('addForm').style.display = 'block';
+}
+
+function saveProduct() {
+  let name = document.getElementById('newName').value;
+  let price = document.getElementById('newPrice').value;
+  let desc = document.getElementById('newDesc').value;
+  let files = document.getElementById('newImages').files;
+
+  if (!name || !price || files.length === 0) {
+    alert("يرجى إدخال اسم المنتج والسعر وصورة واحدة على الأقل");
+    return;
   }
 
-  function saveProduct() {
-    let name = document.getElementById('newName').value;
-    let price = document.getElementById('newPrice').value;
-    let desc = document.getElementById('newDesc').value;
-    let images = document.getElementById('newImages').files;
+  let imagesBase64 = [];
+  let loaded = 0;
 
-    if (!name || !price || images.length === 0) {
-      alert('يجب إدخال اسم المنتج والسعر وإرفاق صورة على الأقل');
-      return;
-    }
+  for (let i = 0; i < files.length; i++) {
+      let reader = new FileReader();
+      reader.onload = function(e) {
+          imagesBase64.push(e.target.result);
+          loaded++;
 
-    let productBox = document.createElement('div');
-    productBox.className = 'product';
+          if (loaded === files.length) {
+              let products = getProducts();
 
-    let imgsHTML = '';
-    for (let i = 0; i < images.length; i++) {
-      let url = URL.createObjectURL(images[i]);
-      imgsHTML += `<img src="${url}" style="width:120px; margin:5px; border-radius:10px;">`;
-    }
+              products.push({
+                  name: name,
+                  price: Number(price),
+                  desc: desc,
+                  images: imagesBase64
+              });
 
-    productBox.innerHTML = `
-      <h3>${name}</h3>
-      <p>السعر: ${price}₪</p>
-      <p>${desc}</p>
-      <div>${imgsHTML}</div>
-      <button class="btn" onclick="buy('${name}', ${price})">شراء الآن</button>
-    `;
-
-    document.getElementById('productsContainer').appendChild(productBox);
-    document.getElementById('addForm').style.display = 'none';
-
-    document.getElementById('newName').value = '';
-    document.getElementById('newPrice').value = '';
-    document.getElementById('newDesc').value = '';
-    document.getElementById('newImages').value = '';
+              saveProductsToStorage(products);
+              displayProducts();
+          }
+      };
+      reader.readAsDataURL(files[i]);
   }
+
+  document.getElementById("addForm").style.display = "none";
+
+  document.getElementById('newName').value = "";
+  document.getElementById('newPrice').value = "";
+  document.getElementById('newDesc').value = "";
+  document.getElementById('newImages').value = "";
+}
+
+/* ---------------------------------------------------
+   صفحة الشراء
+----------------------------------------------------*/
+
+let selectedProduct = {};
+
+function buy(name, price) {
+  selectedProduct = { name, price, shipping:0 };
+  document.getElementById('prodName').innerText = 'المنتج: ' + name;
+  document.getElementById('prodPrice').innerText = 'السعر: ' + price + '₪';
+  document.getElementById('formPage').style.display = 'block';
+}
+
+function updateShipping() {
+  let zone = document.getElementById('zone');
+  let ship = zone.options[zone.selectedIndex].dataset.ship;
+  selectedProduct.shipping = Number(ship);
+  document.getElementById('total').innerText =
+      'المجموع الكلي: ' + (selectedProduct.price + selectedProduct.shipping) + '₪';
+}
+
+function sendWhatsApp() {
+  let name = selectedProduct.name;
+  let price = selectedProduct.price;
+  let zone = document.getElementById('zone').value;
+  let details = document.getElementById('details').value;
+  let fullname = document.getElementById('fullname').value;
+  let phone = document.getElementById('phone').value;
+  let notes = document.getElementById('notes').value;
+  
+  let total = price + selectedProduct.shipping;
+
+  let msg =
+`طلب جديد:
+------------------
+المنتج: ${name}
+السعر: ${price}₪
+المنطقة: ${zone}
+تفاصيل المنطقة: ${details}
+الاسم الكامل: ${fullname}
+الهاتف: ${phone}
+ملاحظات: ${notes}
+المجموع الكلي: ${total}₪`;
+
+  window.open(`https://wa.me/00970595479161?text=${encodeURIComponent(msg)}`);
+}
+
+displayProducts();
 
 </script>
 
