@@ -1,111 +1,175 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
+<link rel="icon" type="image/png" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAOEAAADhCAMAAAAJbSJIAAABU1BMVEX19fUBAEz19fT6/P0BAE0AAEMAAEr7+/r///+fnq719fcAAEYAAEUAAEgAAEH5+fgAAD4AADYAADtfYH8AADNAP2b5///17+v1+frz5+XiXUHprJ/v0cfnhHPosKX8/vr05N3nl4Xx3NPu0c3hZkvghG/fUTPqo5bld2bt08nswbjz6N/rmo7iYEjtqZvnjH7galjwycHfc1vuwrvmnozdUjbmgWzlcF7ojXzmOQDqua9JSXDx2de4ush+fprb2ubrUTNvcI3o6e2LjKTXXEDlRyDYc2LbQiXclovoqpncfGLxurLYaEvbnIrlRCTroJjkxMDtrafqX0/uybbsRB6ysr3ouKbmUDnJyNNjY4EgHlMqLFwSEk1SUXWZmLH4xbvykoKKKDOXh5SdkqCRVmGGP0aLZ3F4MEKtR0RvN1DETDxQMVM9FUDVgYG6l5y/gYBzWnruwqsxAAARLElEQVR4nO2c+0PaSLvHYYIE4iVoLUOu5GYSQgIJJBDSIFGaUheL6xYvu23t6e6+Z9899///pzOgrZfaU9uyr/U986m1QSIz33nmucwkaSaDwWAwGAwGg8FgMBgMBoPBYDAYDAaDwWAwGAwGg8FgMBgMBoPBYDAYDAaDwWAwGAwGg8H8fwcAkJl9ZUClnIG0Au67QwuHVqkKBahKhY4EzRU96p9LIkVlmEjyVZqu+R1ZJMoM17zvPi2YMlQjWa16eosjgdV5+kKo/3PZEAr7rsRET22mzG9phgoIyaLvu1MLhAJbDTqWHY9UxC3DI6AteL5FEGWaQm9WKtT5WSgQUdQ9d/UrAYykdnWLjtiuWpUMJ+QZWD80NaFTpTKVw0ZUI2kUhWhIVBj4ADWCTJlPUqs6DsQMMFizhkS2niJbShIDKhVCtU235Y0ZRkzDWI0q993fL4cqq44HLJ2DscGLDNnWOocMUVV5UTCakSDwlXKVUkJNsKQmy9Xvu7tfDEWpL3zG1m3oOSwPI/NpxJQVn9XthqfEcSxZEf9M744hUTM6jVgZwfvu8RcCqMiK7S2uRpsjDkKtoRCSoXVECUpQbcsHBqfGqMJRm7pjtcEBK4KH5ocUw0Shx2w978i01aqXYeS0RAaObSfQzGjcVj3RbuyHkVJVIsexFU9FIfW+O/0FoCDDjRQQsjWzQ7Q6VWbLjeuU2nwqKh4oA9XyQ9tTJQAMR29CaFmCrZAPy4qgZTIeyymOAbWo7OuH5fg5twdj37GZTqo1x7xqPZdToV1Vw6nX0OVIFysPyYb0c4/5QaRVPfJST2HNDCP/AAgGZQqe0zgGxmMxNOKyxzdMg+EDjhE0oIkPKV9QhNdrM819KARQ/UGF3L5CNAJJEk2zRnit1O2EjU6wZYgKw/VEQk5ji/UeUEYEVHlP5/les9rQGSNgFF0mbIGvR24D+dwLNYZQUrxanVDD1FSYLd2D+42aLioPJmFQlGGAZgKVoMOYTkYZjZkuyuo6V41aPlNVm4Hjc77A6sKYsVMbHk+2UKhVNK78YGJNJYa6JjXSMZOY0NBBzVQOWhYds1sA+nrHg7A2FuM63w5RLdPpjSXd9+P9unlYfSgSKUmLYUuTopSTdBPWAk/24oMXY5U8QCZDNWpX9m3BdGWOMUYePz0YG2Ot3pG2iAeSMUClqUQTo4y8MB4dVI1eRNF2YMWK5DYh05V5CBjPUxVFkl1ZRJbW23bT60qsajyUhEEzkcAw+y6sjeK63oKSwCqwYR4Hcf2Z7DHjliPbDd9utSyPk5Qpx8hSU+BdxbXshxFPAaGJhUhrlw0WWFMbhj2bbrPWWEOrJ8jIqRFXlUOO8wBQRK1nzJzVVMww0njBehjhFIQKI/MxCip0lMZeKjBQ0GAUotqNiHpRVRWeiSrvHURbOipINQGeaEpPSXyxIwqQegClDSUxXsqLrahbF9y6ZXoqn9rgmVcfhcicvMI6HqmGgdaI2rxw0oBTm+/xvqtMVDNqRZH0ACYqYTuK0Il9Wkiljlx3tInSDiQ14PmkA/xRzGu6IEqKIiZsGyauNLKiCROaisuzkm49U4gLK36/xmReQFeOU5VLY7+J1vnsyzErqaln64dIMeN325IX6ies/VLoufVEjqe8jQZEjwOpY40U17uw4neQOa4OMrjcy6ZgYFi6IraYFhdrcdAwZO8HX9LERs2VmVaEVv7NyFO95kjk0w5MpHAaB+L+YUdstjuWpoRlVDQAGvwI79+K9OXeJyAvDylVTSUxoE2TSayWIdqeZpGu0QjDAD5ljAkHa4KZnoRtx+yicqbF+a2odbhnNlq8I4r77VoZ8PUtlrn//F/tDz7oos4KH/oDqrLFBcB2INtwmp7puZzlWpH51pGeKl0UVic9La7ZP6X+xKhNaiPLNTnTcnldYZUpNEOjqwijmszetwmpan9zaVA910Q9Xt++UlUSYq8W6fWuGbmSLjWPu75/KHs9RTgWtLo5DSVRS5ovTTdNaLRSPG7xI4u1PH/cEEStPmnLCfR7/L3v3RT669n8ymA2UUHlyVJ2Y7vw4b2K7Hs92NSVqdKNHC/gBbR40GuR6aVx0PKEYHLCTicsyvgaP1VNMQwbJs+iAtb1UHWDRiKAkQ7v9zIVIPubuWw2XxrQFE09XslmZxIvuxQjG0wl5FZGyws8Vg1eniRygDKCKbydyBOB58es1vPgRBRqLpfOxInNOhuNYpMTUyns8Nb9WzCPVOWyKwOCejITmM1tDD9YEQDJ6il2R0lfyE7UROVK8/gksQS/wSoTzzQkXQi7sJvYqSk25EbIaUqr5saiazlSCgW2nnTuuUalkQVzM1loop6iKXrOxjbx/gQUUPmDbjWx4U8NryWpEKrHqDhD1Y55LAhGorNs0DOEPRPly1rH0/jQNnzD8UPOVFDECS0H3G+gIY9K+XNV+dLp4+X3hzvElXNAS9qSqdhSPJquIF81GkIjdEX2ZWAlCa/wx5aRCFICJxILUz7gR2N7q6bz+njM8iOjdt+potDfmEvMrw0KmbkbZrOlq444248CkKSoSoZG5QCyCIQMkCUnctpB1JGjdKrb0kmNlVKGhV1JR0eut9Xoej3eZK194pNN/4MARH99Fmk2BlWQqTxenQusfm5iUWUuOdY8rWmd+MlLywuT4wSlE4cXvPBAPhQ8U2Gl9lRpNb6D+hvMs0VpQKKYTiEr5jeuW/D2X6KcAzRVD/cjXdTiE91zo0QJoMaNO2rHQ0JFw5ZdVPow953tZ4Bqf710mfE3twuf9xyqont61IK6NeFN2eN+EuoB1GGD44M2CrLSSEpVTd4Tvwd9s7q72j+9qNoATZ2Rd+gWVZseT3lHGjFp7Ho9+xhwptewLddL4AgiY1raSzfiyn9tz7+A88obzAJJhvzcyTPKYeIlvA5dBpU4VjvtyRPYQlMVvQajehKLmseK4t2CzK3ZZPEphiarBEEUyDveYFGREzWI9VhTOdmaiox0WFdHcIRcUa/rUuBzSe2k9snP+rCUmTdK3NIoIBecY+jCYPjmdWn5yfYpQd9pxSrpUJcSSeaYqWL0WFcwREtENR0zkVrSybEfHtY++TnkoD8vgondo59/Wcs/GQ5uhjZADYlFGpEiBm/Wl/Kocssvb7zqF+6wFKBoBiZtIfJ0BQVMwT3eO9ESF9qh5EiddjLujlvl27sIADnYnCmkqWGptJrP51dX1neoa2akiDdvqovRdk6huL6aO6/dctnV9R00ia6t+ud/r6sGVIXUwsgH03a5HtQOm6jMViR/RDX8tu05df2T92QggSsbfRoUTl+voVJj1mwuv/Tq6o04gHiz8ehO4eBOgExheyN7ldKT6xuBNF0l6Y88n6r4MgzKTRc+i7QO1/aMn9KGwqWM6YVo/ctUbl0yoUA2WMqX+nThaGP1Spsrby4dDwlcW12kQmTB/DWFudLO+6UFMh1ZGPSLR6eDAnlj0wzEo7Jr1qec0a1bcrdjc4qRCrHSg4Kg9iTqVjcE1cFaPlfqzxrNXW10o/9+ns4EZpcXqDAzWM/eZLN/8fkUubu9srG2Viqtvzqi6Ot9Jvbbez3mUKfbI0FU2p49cvi6mbj1hPf0T7jyzIJoCE/7mzeazL+6GFVAvVlDvrJAhYVHyx8pzP9yMcXI4cZSLodMjOLB2i+n172/0k6gbgKtW2Zcs81541gy2GmXsXUgO7fe/IV8cO57S2druZtNbgzOjYgsmFuswt2NjwSiJfB8ztDUk9KVCZzfPCtcnaggw9q1pEOzvbCS0Z53Qq2ndT1a6IXxNLy1XjsXiFjN32wyv1Scjd9sis7EL1AhWVy62RhSuDpbHwLiycq1oc6tF69aERCNXiz3bMhNE4NhIlmslaE9Zb36QQ+V3x8ZERCD99PlI4HZ3PLPM03Em6V5k4tTSFV/Xr05YebTFCksbK/d6El+c3Alb1GZsslCrsfyfFMbaWFTNtneyUvFS3t2LRUrNyWSg1L+lrYuWH1Czix4Md4LVEg+ubXV9QKKoZsfvbP6qkB+oFrYg1rCt9nEfCvF/Nvjf2mgnGgkSeJJE6dK3qAwCzKfBoUa8mKKLlRhhnh8xXCXs6d0Viy+uaVDa9vFK7z7tfjuXfHXX3/7/d3ffkf/FIv/+u7d77/9Vvzbu9+KH7Ga/bQFZ9tExeKjpfdnLD8qfL7vd4O8VPjH3/OXmpaWllazt7CydMlKbmU5n11aXUXfUbBdXllZmYXd1VUUf6+ed3H2/2XBeZNrK5fN7Cwu0lwozOX/TP7tM124GGykZvZt/lvzqgtluFzu/GB2NP9ZNv/+z4eDz35y7r0Fc9mls4XVpR9s+EeS/HRb0LkPctnSKb2otcWFwtwfmi/L//75cf6HkMuvLe5CwFxhPvdHKCfJ5O/ficLs2nBxJQ35eBYc/jCFCYryyX/ct7Rz8tkFrvCRDXO5P5O9iWMmrZP//D6MuHm6wKdVkA3zfyRamOwliXxy8l9r960OWXD9aJELfPLx0p9J0jV9FilEB/9dmsf8O3cn9z7E53IXKeObyGXza8t32ke5u8JX/zOdJm5HkydBmCR+0vxzDSX7/JxbxneW4C7JzXPhtRH58N61E2+8uo35Gcul0s7uAhe/CLpIK1In8acd0+0kQmvip8+Pdh6vzFaFKzermvxSfvlKX1Hp8Tq7vvT69erG6vLm+jr6Wl/NLefO31y5Jmr1cxKzy+iMVz8XdwuLfnaKBJWKN5UdFElPEn1idiZSeb6LSRDU4+ulZG7jrEBcpTDpqN6WZr6NyUIcM6oqxVBqS8TXUyApcmG5/grlYLI3k5hMuvLkh/KHZS71uHTVgpvDwrVETNG1hsm2eU7rqUbg2rbDphqrqV99uWn2qEahWPz8haEv/mAUYhLbN13TDyfJhPswS2hie335wh1zSyv9myGuIgoW9ASpDstwbFljRqpnqpVvup5WKK5vIomL1QiUHlI4PTGFVjKdGfLyzkmqOthZ2lhbWyttvD77eKedqr919Gd+68TZMn2zKwhOsPdt1wuRwFx2Y+FWrERTE1gtJK7DQ2fCX5uKJHGK1nZHg0L1lsd9mGcwkiIGQqY2uwgeK9VvubMEUHOBKOMXF7rjPXvoQAVUpZ4mAV2hmJi4viEMaLRAp28vMiqQtjqOK6iiGQrdLdN9Cr/FhhcCs4u2Ihp1pKnC9NIEzh5Hv80JPhHAQeXHA0WKAYFSDiPFNZX4lhsR6eJm/jx45zeLf8FTxuBH/itum6As120pW4ETHDuaW/umHtC7r883jfK517t/xR0cNP0VPlRpNzxQgYykwHpcvuKpFzNhflEJnKe4qxdfQIbOfGQmenceufP517tf05e/BoppNhl+xKYp15SuXbGa3ZeSAbsDAKjd/u7sNUXN/+uJ8zepU+r0o0+jd3/J52YW/I6ehAeV0PAUHrkhfT0RzmoiFKB2j1AZNHg0KKBXp6ck+mlmZj0UvYbE2ccFKL27ml/+rgSiWdjmuq2W88xiLiYhMhnIAOJsuH10drS7UxwO0ffT7Ue7p8PhYDgsVk8H1f6gWDijireU2MgXvy+B8/9wgCDLZeIyW5LDAkEWdo6o/ll/d6dfKJzt7mxT/d2zSqFYKBSP+sXBXGHhFhsiiYPvTeDMu6hrV3Dpo9n+71HxbGd7OOxvF4s7w+JguLO7OyzuoBePCoP+6fbwbHvYv03KLAR9L0HmE4AMSe4OSJIaDqqoVCDoKkHS5GCIqlzkfadVJHSwTZ0S5F3v+/humd8SD87vAECGubiEjLIASWYI8NDVYTAYDAaDwWAwGAwGg8FgMBgMBoPBYDAYDAaDwWAwGAwGg8FgMBgMBoPBYDAYDAaDwWAwGAwGg8FgMJ/ifwG4zoAYzTmnhwAAAABJRU5ErkJggg==">
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Q Luxury</title>
 
+<!-- خط عربي احترافي -->
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+
 <style>
+/* --- الأساسيات --- */
 body {
-    font-family: sans-serif;
-    background: #ffe7c2;
-    padding: 15px;
+    font-family: "Tajawal", sans-serif;
+    background: #faf7f2;
     margin: 0;
-    font-size: 18px;
+    padding: 15px;
+    color: #333;
 }
-button, a {
-    cursor: pointer;
-    border: none;
-    border-radius: 8px;
-    font-size: 18px;
-    padding: 12px 20px;
+
+/* --- عنوان رئيسي --- */
+h2 {
+    text-align: center;
+    font-size: 28px;
+    margin: 20px 0;
+    font-weight: 700;
 }
-.hidden { display: none; }
-header {
-    display: flex;
-    gap: 15px;
-    margin-bottom: 20px;
+
+/* --- بطاقة المنتج --- */
+.product {
+    background: #fff;
+    padding: 18px;
+    margin-bottom: 22px;
+    border-radius: 20px;
+    box-shadow: 0 4px 10px #00000015;
+    transition: 0.3s;
 }
-#products .product {
-    background: white;
-    padding: 20px;
-    border-radius: 15px;
-    margin-bottom: 20px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 15px;
+.product:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 6px 14px #00000025;
 }
 .product img {
     width: 100%;
-    max-width: 260px;
     border-radius: 15px;
 }
+.product h3 {
+    font-size: 22px;
+    margin: 10px 0;
+}
+.product p {
+    color: #555;
+    font-size: 16px;
+    margin-bottom: 8px;
+}
+
+/* --- زر شراء الآن --- */
 .buyNowBtn {
-    background: #000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+
+    background: #0d0d0d;
     color: white;
     width: 100%;
+    padding: 14px;
+    border-radius: 14px;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+    transition: 0.25s;
 }
+.buyNowBtn:hover {
+    background: #333;
+    transform: scale(1.03);
+}
+
+/* --- أيقونة العربة --- */
+.buyNowBtn svg {
+    width: 22px;
+    fill: #fff;
+}
+
+/* --- صفحة الإتمام --- */
 #checkoutPage {
-    background:white;
-    padding:20px;
-    border-radius:15px;
+    background: white;
+    padding: 22px;
+    border-radius: 22px;
+    margin-top: 20px;
+    box-shadow: 0 4px 15px #00000020;
 }
+#checkoutPage h2 {
+    font-size: 26px;
+}
+
+/* --- الحقول --- */
 input, textarea, select {
     width: 100%;
-    padding: 12px;
+    padding: 14px;
     margin: 10px 0;
+    border-radius: 12px;
     font-size: 18px;
-    border-radius: 8px;
+    border: 1px solid #ddd;
+    transition: 0.25s;
 }
-#checkoutPage h2, #checkoutPage h3 {
-    text-align: center;
+input:focus, textarea:focus, select:focus {
+    border-color: #000;
+}
+
+/* --- زر الرجوع --- */
+.backBtn {
+    background: #000;
+    color: #fff;
+    padding: 12px 18px;
+    border-radius: 12px;
+    font-size: 18px;
+    border: none;
+}
+
+/* --- موبايل أولاً --- */
+@media (min-width: 700px) {
+    body {
+        width: 600px;
+        margin: auto;
+    }
 }
 </style>
 </head>
+
 <body>
 
-<!-- الشعار -->
-<div style="text-align:center; margin-bottom: 25px;">
-    <img src="logo.png" alt="Q.Luxury" style="width:170px; height:170px; border-radius:50%; object-fit:cover;">
-</div>
+<h2>🛍️عطورنا</h2>
 
-<h2>المنتجات</h2>
 <div id="products"></div>
 
 <!-- صفحة الإتمام -->
 <div id="checkoutPage" class="hidden">
-    <button onclick="closeCheckout()" style="background:#000;color:white;border-radius:10px;padding:10px 20px;margin-bottom:15px;">⬅ الرجوع</button>
+    <button onclick="closeCheckout()" class="backBtn">⬅ الرجوع</button>
 
     <h2>إتمام الطلب</h2>
 
     <label>المنطقة:</label>
     <select id="region" onchange="updateCheckout()">
         <option value="none">اختر المنطقة</option>
-        <option value="westbank">الضفة الغربية ₪20</option>
-        <option value="jerusalem">القدس ₪30</option>
-        <option value="inside48">الداخل المحتل ₪70</option>
+        <option value="westbank">الضفة — ₪20</option>
+        <option value="jerusalem">القدس — ₪30</option>
+        <option value="inside48">الداخل — ₪70</option>
     </select>
 
+     <label>العنوان بالتفصيل:</label>
+    <input type="text" id="address">
+    
     <label>الاسم الكامل:</label>
     <input type="text" id="fullname">
 
-    <label>الهاتف:</label>
+    <label>رقم الهاتف:</label>
     <input type="text" id="phone">
-
-    <label>العنوان:</label>
-    <input type="text" id="address">
 
     <label>ملاحظات:</label>
     <textarea id="notes"></textarea>
 
-    <h3 id="checkoutTotal"></h3>
+    <h3 id="checkoutTotal" style="text-align:center;"></h3>
 
-    <button onclick="sendOrder()" class="buyNowBtn">إرسال الطلب عبر واتساب</button>
+    <button onclick="sendOrder()" class="buyNowBtn">
+        إرسال الطلب
+        <svg viewBox="0 0 512 512"><path d="M476 3L12 217c-16 7-15 30 1 36l111 40 41 111c6 16 29 17 36 1L476 36c7-17-11-35-28-28zM175 319l17 48 32-72 137-137c6-6 6-16 0-22s-16-6-22 0L202 273l-74-27 347-157-300 230z"/></svg>
+    </button>
 </div>
 
 <script>
-/* تحميل المنتجات من JSON */
+/* --- تحميل المنتجات --- */
 let products = [];
 
 fetch("products.json")
@@ -115,6 +179,7 @@ fetch("products.json")
       loadProducts();
   });
 
+/* --- عرض المنتجات --- */
 function loadProducts(){
     let box = document.getElementById("products");
     box.innerHTML = "";
@@ -126,32 +191,38 @@ function loadProducts(){
                 <h3>${p.name}</h3>
                 <p>${p.desc}</p>
                 <p><b>₪${p.price}</b></p>
-                <button class="buyNowBtn" onclick="buyNow(${i})">شراء الآن</button>
+
+                <button class="buyNowBtn" onclick="buyNow(${i})">
+                    <svg viewBox="0 0 24 24"><path d="M7 4h-2l-1 2h2l3.6 7.59-1.35 2.44c-.16.28-.25.61-.25.97 0 1.1.9 2 2 2h10v-2h-10l1.1-2h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49c.08-.14.12-.31.12-.48 0-.55-.45-1-1-1h-16.31l-.94-2zm-3 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2zm14 0c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z"></path></svg>
+                    شراء الآن
+                </button>
             </div>
         `;
     });
 }
 
+/* --- شراء --- */
 let lastBuy = [];
-let shipping = { westbank:20, jerusalem:30, inside48:70 };
 
 function buyNow(i){
     lastBuy = [products[i]];
     openCheckout();
 }
 
+let shipping = { jerusalem:30, westbank:20, inside48:70 };
+
 function openCheckout(){
     document.getElementById("checkoutPage").classList.remove("hidden");
     updateCheckout();
 }
-
 function closeCheckout(){
     document.getElementById("checkoutPage").classList.add("hidden");
 }
 
+/* --- حساب المجموع --- */
 function updateCheckout(){
     let region = document.getElementById("region").value;
-    let total = lastBuy.reduce((a,b)=>a+Number(b.price),0);
+    let total = lastBuy[0].price;
 
     if(region !== "none"){
         total += shipping[region];
@@ -160,6 +231,7 @@ function updateCheckout(){
     document.getElementById("checkoutTotal").innerHTML = "المجموع النهائي: ₪" + total;
 }
 
+/* --- إرسال الواتساب --- */
 function sendOrder(){
     let name = fullname.value;
     let phoneNumber = phone.value;
@@ -171,25 +243,21 @@ function sendOrder(){
         return;
     }
 
-    let items = lastBuy.map(p => `• ${p.name} - ₪${p.price}`).join("\n");
-
-    let msg =
+    let msg = 
 `طلب جديد:
----------------------
 الاسم: ${name}
 الهاتف: ${phoneNumber}
 المنطقة: ${region}
 العنوان: ${addr}
 
-المنتجات:
-${items}
+المنتج:
+- ${lastBuy[0].name} — ₪${lastBuy[0].price}
 
 ملاحظات:
-${notes.value}
----------------------`;
+${notes.value}`;
 
     window.location.href =
-       "https://wa.me/00970595479161?text=" + encodeURIComponent(msg);
+    "https://wa.me/message/KDCNJDBBGIALJ1" + encodeURIComponent(msg);
 }
 </script>
 
