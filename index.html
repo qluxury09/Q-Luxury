@@ -5,146 +5,86 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>المتجر</title>
 
-<!-- خط عربي احترافي -->
-<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&family=Cairo:wght@400;700&display=swap" rel="stylesheet">
-
 <style>
-/* --- الأساسيات --- */
 body {
-    font-family: "Tajawal", sans-serif;
-    background: #faf7f2;
-    margin: 0;
+    font-family: sans-serif;
+    background: #ffe7c2;
     padding: 15px;
-    color: #333;
+    margin: 0;
+    font-size: 18px;
 }
-
-/* --- عنوان رئيسي --- */
-h2 {
-    text-align: center;
-    font-size: 28px;
-    margin: 20px 0;
-    font-weight: 700;
+button, a {
+    cursor: pointer;
+    border: none;
+    border-radius: 8px;
+    font-size: 18px;
+    padding: 12px 20px;
 }
-
-/* --- بطاقة المنتج --- */
-.product {
-    background: #fff;
-    padding: 18px;
-    margin-bottom: 22px;
-    border-radius: 20px;
-    box-shadow: 0 4px 10px #00000015;
-    transition: 0.3s;
+.hidden { display: none; }
+header {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 20px;
 }
-.product:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 6px 14px #00000025;
+#products .product {
+    background: white;
+    padding: 20px;
+    border-radius: 15px;
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
 }
 .product img {
     width: 100%;
+    max-width: 260px;
     border-radius: 15px;
 }
-.product h3 {
-    font-size: 22px;
-    margin: 10px 0;
-}
-.product p {
-    color: #555;
-    font-size: 16px;
-    margin-bottom: 8px;
-}
-
-/* --- زر شراء الآن --- */
 .buyNowBtn {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-
-    background: #0d0d0d;
+    background: #000;
     color: white;
     width: 100%;
-    padding: 14px;
-    border-radius: 14px;
-    border: none;
-    font-size: 20px;
-    cursor: pointer;
-    transition: 0.25s;
 }
-.buyNowBtn:hover {
-    background: #333;
-    transform: scale(1.03);
-}
-
-/* --- أيقونة العربة --- */
-.buyNowBtn svg {
-    width: 22px;
-    fill: #fff;
-}
-
-/* --- صفحة الإتمام --- */
 #checkoutPage {
-    background: white;
-    padding: 22px;
-    border-radius: 22px;
-    margin-top: 20px;
-    box-shadow: 0 4px 15px #00000020;
+    background:white;
+    padding:20px;
+    border-radius:15px;
 }
-#checkoutPage h2 {
-    font-size: 26px;
-}
-
-/* --- الحقول --- */
 input, textarea, select {
     width: 100%;
-    padding: 14px;
+    padding: 12px;
     margin: 10px 0;
-    border-radius: 12px;
     font-size: 18px;
-    border: 1px solid #ddd;
-    transition: 0.25s;
+    border-radius: 8px;
 }
-input:focus, textarea:focus, select:focus {
-    border-color: #000;
-}
-
-/* --- زر الرجوع --- */
-.backBtn {
-    background: #000;
-    color: #fff;
-    padding: 12px 18px;
-    border-radius: 12px;
-    font-size: 18px;
-    border: none;
-}
-
-/* --- موبايل أولاً --- */
-@media (min-width: 700px) {
-    body {
-        width: 600px;
-        margin: auto;
-    }
+#checkoutPage h2, #checkoutPage h3 {
+    text-align: center;
 }
 </style>
 </head>
-
 <body>
 
-<h2>🛍️ منتجاتنا</h2>
+<!-- الشعار -->
+<div style="text-align:center; margin-bottom: 25px;">
+    <img src="logo.png" alt="Q.Luxury" style="width:170px; height:170px; border-radius:50%; object-fit:cover;">
+</div>
 
+<h2>المنتجات</h2>
 <div id="products"></div>
 
 <!-- صفحة الإتمام -->
 <div id="checkoutPage" class="hidden">
-    <button onclick="closeCheckout()" class="backBtn">⬅ الرجوع</button>
+    <button onclick="closeCheckout()" style="background:#000;color:white;border-radius:10px;padding:10px 20px;margin-bottom:15px;">⬅ الرجوع</button>
 
     <h2>إتمام الطلب</h2>
 
     <label>المنطقة:</label>
     <select id="region" onchange="updateCheckout()">
         <option value="none">اختر المنطقة</option>
-        <option value="westbank">الضفة — ₪20</option>
-        <option value="jerusalem">القدس — ₪30</option>
-        <option value="inside48">الداخل — ₪70</option>
+        <option value="westbank">الضفة الغربية ₪20</option>
+        <option value="jerusalem">القدس ₪30</option>
+        <option value="inside48">الداخل المحتل ₪70</option>
     </select>
 
     <label>الاسم الكامل:</label>
@@ -159,16 +99,13 @@ input:focus, textarea:focus, select:focus {
     <label>ملاحظات:</label>
     <textarea id="notes"></textarea>
 
-    <h3 id="checkoutTotal" style="text-align:center;"></h3>
+    <h3 id="checkoutTotal"></h3>
 
-    <button onclick="sendOrder()" class="buyNowBtn">
-        إرسال الطلب
-        <svg viewBox="0 0 512 512"><path d="M476 3L12 217c-16 7-15 30 1 36l111 40 41 111c6 16 29 17 36 1L476 36c7-17-11-35-28-28zM175 319l17 48 32-72 137-137c6-6 6-16 0-22s-16-6-22 0L202 273l-74-27 347-157-300 230z"/></svg>
-    </button>
+    <button onclick="sendOrder()" class="buyNowBtn">إرسال الطلب عبر واتساب</button>
 </div>
 
 <script>
-/* --- تحميل المنتجات --- */
+/* تحميل المنتجات من JSON */
 let products = [];
 
 fetch("products.json")
@@ -178,7 +115,6 @@ fetch("products.json")
       loadProducts();
   });
 
-/* --- عرض المنتجات --- */
 function loadProducts(){
     let box = document.getElementById("products");
     box.innerHTML = "";
@@ -190,38 +126,32 @@ function loadProducts(){
                 <h3>${p.name}</h3>
                 <p>${p.desc}</p>
                 <p><b>₪${p.price}</b></p>
-
-                <button class="buyNowBtn" onclick="buyNow(${i})">
-                    <svg viewBox="0 0 24 24"><path d="M7 4h-2l-1 2h2l3.6 7.59-1.35 2.44c-.16.28-.25.61-.25.97 0 1.1.9 2 2 2h10v-2h-10l1.1-2h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49c.08-.14.12-.31.12-.48 0-.55-.45-1-1-1h-16.31l-.94-2zm-3 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2zm14 0c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z"></path></svg>
-                    شراء الآن
-                </button>
+                <button class="buyNowBtn" onclick="buyNow(${i})">شراء الآن</button>
             </div>
         `;
     });
 }
 
-/* --- شراء --- */
 let lastBuy = [];
+let shipping = { westbank:20, jerusalem:30, inside48:70 };
 
 function buyNow(i){
     lastBuy = [products[i]];
     openCheckout();
 }
 
-let shipping = { jerusalem:30, westbank:20, inside48:70 };
-
 function openCheckout(){
     document.getElementById("checkoutPage").classList.remove("hidden");
     updateCheckout();
 }
+
 function closeCheckout(){
     document.getElementById("checkoutPage").classList.add("hidden");
 }
 
-/* --- حساب المجموع --- */
 function updateCheckout(){
     let region = document.getElementById("region").value;
-    let total = lastBuy[0].price;
+    let total = lastBuy.reduce((a,b)=>a+Number(b.price),0);
 
     if(region !== "none"){
         total += shipping[region];
@@ -230,7 +160,6 @@ function updateCheckout(){
     document.getElementById("checkoutTotal").innerHTML = "المجموع النهائي: ₪" + total;
 }
 
-/* --- إرسال الواتساب --- */
 function sendOrder(){
     let name = fullname.value;
     let phoneNumber = phone.value;
@@ -242,21 +171,25 @@ function sendOrder(){
         return;
     }
 
-    let msg = 
+    let items = lastBuy.map(p => `• ${p.name} - ₪${p.price}`).join("\n");
+
+    let msg =
 `طلب جديد:
+---------------------
 الاسم: ${name}
 الهاتف: ${phoneNumber}
 المنطقة: ${region}
 العنوان: ${addr}
 
-المنتج:
-- ${lastBuy[0].name} — ₪${lastBuy[0].price}
+المنتجات:
+${items}
 
 ملاحظات:
-${notes.value}`;
+${notes.value}
+---------------------`;
 
     window.location.href =
-    "https://wa.me/00970595479161?text=" + encodeURIComponent(msg);
+       "https://wa.me/00970595479161?text=" + encodeURIComponent(msg);
 }
 </script>
 
