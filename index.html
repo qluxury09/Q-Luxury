@@ -1,144 +1,150 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="UTF-8">
+<meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>المتجر</title>
 
+<!-- خط عربي احترافي -->
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+
 <style>
-/* --- ألوان --- */
+/* --- الأساسيات --- */
 body {
-    font-family: sans-serif;
-    background: #ffe7c2; /* اللون الرئيسي */
-    padding: 15px;
+    font-family: "Tajawal", sans-serif;
+    background: #faf7f2;
     margin: 0;
-    font-size: 18px;
+    padding: 15px;
+    color: #333;
 }
 
-/* --- زر المدير --- */
-button, a {
-    cursor: pointer;
-    border: none;
-    border-radius: 8px;
-    font-size: 18px;
-    padding: 12px 20px;
-}
-
-/* --- إخفاء عناصر --- */
-.hidden { display: none; }
-
-/* --- الهيدر --- */
-header {
-    display: flex;
-    justify-content: flex-start;
-    gap: 15px;
-    margin-bottom: 20px;
-}
-
-#adminBtn {
-    background: #000000;  /* أسود */
-    color: white;
-}
-
-/* --- لوحة المدير --- */
-#adminPanel, .product, #checkoutPage {
-    background: white;
-    padding: 20px;
-    border-radius: 15px;
-    margin-bottom: 20px;
-}
-
-/* --- المنتجات --- */
-.product {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 15px;
+/* --- عنوان رئيسي --- */
+h2 {
     text-align: center;
+    font-size: 28px;
+    margin: 20px 0;
+    font-weight: 700;
 }
 
+/* --- بطاقة المنتج --- */
+.product {
+    background: #fff;
+    padding: 18px;
+    margin-bottom: 22px;
+    border-radius: 20px;
+    box-shadow: 0 4px 10px #00000015;
+    transition: 0.3s;
+}
+.product:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 6px 14px #00000025;
+}
 .product img {
     width: 100%;
-    max-width: 250px;
     border-radius: 15px;
 }
-
-/* --- أزرار --- */
-.buyNowBtn {
-    background: #000000;
-    color: white;
-    width: 100%;
-}
-
-.deleteBtn {
-    background: red;
-    color: white;
-    width: 100%;
-    padding: 10px;
-}
-
-input, textarea, select {
-    width: 100%;
-    padding: 12px;
+.product h3 {
+    font-size: 22px;
     margin: 10px 0;
-    font-size: 18px;
-    border-radius: 8px;
+}
+.product p {
+    color: #555;
+    font-size: 16px;
+    margin-bottom: 8px;
+}
+
+/* --- زر شراء الآن --- */
+.buyNowBtn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+
+    background: #0d0d0d;
+    color: white;
+    width: 100%;
+    padding: 14px;
+    border-radius: 14px;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+    transition: 0.25s;
+}
+.buyNowBtn:hover {
+    background: #333;
+    transform: scale(1.03);
+}
+
+/* --- أيقونة العربة --- */
+.buyNowBtn svg {
+    width: 22px;
+    fill: #fff;
 }
 
 /* --- صفحة الإتمام --- */
-#checkoutPage h2, #checkoutPage h3 {
-    text-align: center;
+#checkoutPage {
+    background: white;
+    padding: 22px;
+    border-radius: 22px;
+    margin-top: 20px;
+    box-shadow: 0 4px 15px #00000020;
+}
+#checkoutPage h2 {
+    font-size: 26px;
 }
 
-/* --- responsive --- */
-@media (max-width: 600px) {
+/* --- الحقول --- */
+input, textarea, select {
+    width: 100%;
+    padding: 14px;
+    margin: 10px 0;
+    border-radius: 12px;
+    font-size: 18px;
+    border: 1px solid #ddd;
+    transition: 0.25s;
+}
+input:focus, textarea:focus, select:focus {
+    border-color: #000;
+}
+
+/* --- زر الرجوع --- */
+.backBtn {
+    background: #000;
+    color: #fff;
+    padding: 12px 18px;
+    border-radius: 12px;
+    font-size: 18px;
+    border: none;
+}
+
+/* --- موبايل أولاً --- */
+@media (min-width: 700px) {
     body {
-        font-size: 20px;
-        padding: 10px;
-    }
-
-    button {
-        font-size: 20px;
-        padding: 15px 20px;
-    }
-
-    .product img {
-        max-width: 100%;
+        width: 600px;
+        margin: auto;
     }
 }
 </style>
 </head>
+
 <body>
 
-<header>
-    <button id="adminBtn">🔒 دخول المدير</button>
-</header>
+<h2>🛍️ منتجاتنا</h2>
 
-<!-- لوحة المدير -->
-<div id="adminPanel" class="hidden">
-    <h3>إضافة منتج جديد</h3>
-    <input id="pName" type="text" placeholder="اسم المنتج">
-    <input id="pPrice" type="number" placeholder="السعر">
-    <textarea id="pDesc" placeholder="الوصف"></textarea>
-    <input id="pImage" type="file" accept="image/*">
-    <button onclick="saveProduct()">حفظ المنتج</button>
-</div>
-
-<!-- المنتجات -->
-<h2>المنتجات</h2>
 <div id="products"></div>
 
-<!-- صفحة إتمام الطلب -->
+<!-- صفحة الإتمام -->
 <div id="checkoutPage" class="hidden">
-    <button onclick="closeCheckout()" style="background:#000;color:white;">⬅ الرجوع</button>
+    <button onclick="closeCheckout()" class="backBtn">⬅ الرجوع</button>
+
     <h2>إتمام الطلب</h2>
 
     <label>المنطقة:</label>
     <select id="region" onchange="updateCheckout()">
         <option value="none">اختر المنطقة</option>
-        <option value="jerusalem">القدس</option>
-        <option value="westbank">الضفة</option>
-        <option value="inside48">الداخل</option>
+        <option value="westbank">الضفة — ₪20</option>
+        <option value="jerusalem">القدس — ₪30</option>
+        <option value="inside48">الداخل — ₪70</option>
     </select>
 
     <label>الاسم الكامل:</label>
@@ -153,30 +159,26 @@ input, textarea, select {
     <label>ملاحظات:</label>
     <textarea id="notes"></textarea>
 
-    <h3 id="checkoutTotal"></h3>
+    <h3 id="checkoutTotal" style="text-align:center;"></h3>
 
-    <button onclick="sendOrder()" class="buyNowBtn">إرسال الطلب</button>
+    <button onclick="sendOrder()" class="buyNowBtn">
+        إرسال الطلب
+        <svg viewBox="0 0 512 512"><path d="M476 3L12 217c-16 7-15 30 1 36l111 40 41 111c6 16 29 17 36 1L476 36c7-17-11-35-28-28zM175 319l17 48 32-72 137-137c6-6 6-16 0-22s-16-6-22 0L202 273l-74-27 347-157-300 230z"/></svg>
+    </button>
 </div>
 
 <script>
-/* -----------------------------
-   المتغيرات الأساسية
------------------------------ */
-let products = JSON.parse(localStorage.getItem("products") || "[]");
-let lastBuy = []; // آخر عملية شراء فقط
-let adminMode = false;
-let password = "qais.islam.2009.2025";
+/* --- تحميل المنتجات --- */
+let products = [];
 
-/* -----------------------------
-   حفظ البيانات
------------------------------ */
-function saveProducts(){
-    localStorage.setItem("products", JSON.stringify(products));
-}
+fetch("products.json")
+  .then(res => res.json())
+  .then(data => {
+      products = data;
+      loadProducts();
+  });
 
-/* -----------------------------
-   تحميل المنتجات
------------------------------ */
+/* --- عرض المنتجات --- */
 function loadProducts(){
     let box = document.getElementById("products");
     box.innerHTML = "";
@@ -187,139 +189,75 @@ function loadProducts(){
                 <img src="${p.img}">
                 <h3>${p.name}</h3>
                 <p>${p.desc}</p>
-                <p><b>${p.price} شيكل</b></p>
-                <button class="buyNowBtn" onclick="buyNow(${i})">شراء الآن</button>
-                ${adminMode ? `<button class="deleteBtn" onclick="deleteProduct(${i})">حذف</button>` : ""}
+                <p><b>₪${p.price}</b></p>
+
+                <button class="buyNowBtn" onclick="buyNow(${i})">
+                    <svg viewBox="0 0 24 24"><path d="M7 4h-2l-1 2h2l3.6 7.59-1.35 2.44c-.16.28-.25.61-.25.97 0 1.1.9 2 2 2h10v-2h-10l1.1-2h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49c.08-.14.12-.31.12-.48 0-.55-.45-1-1-1h-16.31l-.94-2zm-3 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2zm14 0c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z"></path></svg>
+                    شراء الآن
+                </button>
             </div>
         `;
     });
 }
-loadProducts();
 
-/* -----------------------------
-   شراء الآن (بدون سلة)
------------------------------ */
+/* --- شراء --- */
+let lastBuy = [];
+
 function buyNow(i){
-    lastBuy = [ products[i] ];
+    lastBuy = [products[i]];
     openCheckout();
 }
 
-/* -----------------------------
-   صفحة الإتمام
------------------------------ */
 let shipping = { jerusalem:30, westbank:20, inside48:70 };
-const regionInput = document.getElementById("region");
-const checkoutTotal = document.getElementById("checkoutTotal");
-const fullname = document.getElementById("fullname");
-const phone = document.getElementById("phone");
-const address = document.getElementById("address");
-const notes = document.getElementById("notes");
 
 function openCheckout(){
     document.getElementById("checkoutPage").classList.remove("hidden");
     updateCheckout();
 }
-
 function closeCheckout(){
     document.getElementById("checkoutPage").classList.add("hidden");
 }
 
+/* --- حساب المجموع --- */
 function updateCheckout(){
-    let region = regionInput.value;
-    let total = lastBuy.reduce((a,b)=>a+Number(b.price),0);
+    let region = document.getElementById("region").value;
+    let total = lastBuy[0].price;
 
     if(region !== "none"){
         total += shipping[region];
     }
 
-    checkoutTotal.innerHTML = "المجموع النهائي: " + total + " شيكل";
+    document.getElementById("checkoutTotal").innerHTML = "المجموع النهائي: ₪" + total;
 }
 
-/* -----------------------------
-   إرسال الطلب
------------------------------ */
+/* --- إرسال الواتساب --- */
 function sendOrder(){
     let name = fullname.value;
     let phoneNumber = phone.value;
     let addr = address.value;
-    let region = regionInput.value;
+    let region = document.getElementById("region").value;
 
     if(!name || !phoneNumber || !addr || region === "none"){
         alert("يرجى تعبئة جميع البيانات");
         return;
     }
 
-    let items = lastBuy.map(p => `- ${p.name} (${p.price} شيكل)`).join("\n");
-
-    let msg =
+    let msg = 
 `طلب جديد:
 الاسم: ${name}
 الهاتف: ${phoneNumber}
 المنطقة: ${region}
 العنوان: ${addr}
 
-المنتجات:
-${items}
+المنتج:
+- ${lastBuy[0].name} — ₪${lastBuy[0].price}
 
 ملاحظات:
 ${notes.value}`;
 
-    window.open("https://wa.me/00970595479161?text=" + encodeURIComponent(msg));
+    window.location.href =
+    "https://wa.me/00970595479161?text=" + encodeURIComponent(msg);
 }
-
-/* -----------------------------
-   إضافة منتج جديد
------------------------------ */
-function saveProduct(){
-    let name = pName.value;
-    let price = pPrice.value;
-    let desc = pDesc.value;
-    let imgFile = pImage.files[0];
-
-    if(!name || !price || !imgFile){
-        alert("يرجى تعبئة البيانات");
-        return;
-    }
-
-    let r = new FileReader();
-    r.onload = ()=>{
-        products.push({
-            name,
-            price,
-            desc,
-            img: r.result
-        });
-
-        saveProducts();
-        loadProducts();
-        alert("تم إضافة المنتج");
-    };
-    r.readAsDataURL(imgFile);
-}
-
-/* -----------------------------
-   حذف المنتج
------------------------------ */
-function deleteProduct(i){
-    products.splice(i, 1);
-    saveProducts();
-    loadProducts();
-}
-
-/* -----------------------------
-   تسجيل دخول المدير
------------------------------ */
-adminBtn.onclick = ()=>{
-    let x = prompt("أدخل كلمة السر:");
-
-    if(x === password){
-        adminMode = true;
-        adminPanel.classList.remove("hidden");
-        loadProducts();
-    } else {
-        alert("كلمة السر خاطئة");
-    }
-};
 </script>
 
 </body>
