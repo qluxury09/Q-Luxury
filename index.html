@@ -151,8 +151,12 @@ function buyNow(i){
 const shipping = { jerusalem:30, westbank:20, inside48:70 };
 
 function openCheckout(){
-    document.getElementById("checkoutPage").style.display = "block";
+    const checkout = document.getElementById("checkoutPage");
+    checkout.style.display = "block";
     updateCheckout();
+
+    // ⬇️ سكرول تلقائي إلى قسم الدفع
+    checkout.scrollIntoView({ behavior: "smooth" });
 }
 
 function updateCheckout(){
