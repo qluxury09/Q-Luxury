@@ -1,13 +1,13 @@
 [
   {
     "name": "Q Savir-كيو سافير",
-    "price": "100",
+    "price": 100,
     "desc": "عطر يعكس الفخامة و الجاذبية و الانوثة و الرجولة و القوة و الضعف 100mill",
-    "img": "https://m.media-amazon.com/images/I/71t9wFKYOcL._AC_UF350,350_QL80_.jpg"
+    "img": "images/q_savir.jpg"
   },
   {
     "name": "سماعات بلوتوث",
-    "price": "60",
+    "price": 60,
     "desc": "جودة صوت ممتازة",
     "img": "images/airpods.jpg"
   }
