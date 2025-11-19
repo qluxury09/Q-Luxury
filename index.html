@@ -84,6 +84,9 @@ input:focus, textarea:focus, select:focus { border-color: #000; }
 <div id="checkoutPage">
     <h2>إتمام الطلب</h2>
 
+    <h3 id="prodName" style="text-align:center; margin-bottom: 10px; color:#000"></h3>
+    <h3 id="prodPrice" style="text-align:center; margin-top:-10px; color:#444"></h3>
+
     <label>المنطقة:</label>
     <select id="region" onchange="updateCheckout()">
         <option value="none">اختر المنطقة</option>
@@ -146,6 +149,10 @@ let lastBuy = [];
 function buyNow(i){
     lastBuy = [products[i]];
     openCheckout();
+
+    // إظهار اسم المنتج وسعره في صفحة الدفع
+    document.getElementById("prodName").innerHTML = lastBuy[0].name;
+    document.getElementById("prodPrice").innerHTML = "سعر العطر: ₪" + lastBuy[0].price;
 }
 
 const shipping = { jerusalem:30, westbank:20, inside48:70 };
@@ -155,19 +162,20 @@ function openCheckout(){
     checkout.style.display = "block";
     updateCheckout();
 
-    // ⬇️ سكرول تلقائي إلى قسم الدفع
     checkout.scrollIntoView({ behavior: "smooth" });
 }
 
 function updateCheckout(){
     const region = document.getElementById("region").value;
-    let total = Number(lastBuy[0].price);
+    let price = Number(lastBuy[0].price);
+    let total = price;
 
     if(region !== "none"){
         total += shipping[region];
     }
 
-    document.getElementById("checkoutTotal").innerHTML = "المجموع النهائي: ₪" + total;
+    document.getElementById("checkoutTotal").innerHTML =
+        `سعر العطر: ₪${price}<br>المجموع الكلي شامل التوصيل: ₪${total}`;
 }
 
 function sendOrder(){
@@ -182,15 +190,20 @@ function sendOrder(){
         return;
     }
 
+    let price = Number(lastBuy[0].price);
+    let total = price + shipping[region];
+
     const msg = 
 `طلب جديد:
 الاسم: ${name}
 الهاتف: ${phoneNumber}
-المنطقة: ${region}
 العنوان: ${addr}
+المنطقة: ${region}
 
 المنتج:
-- ${lastBuy[0].name} — ₪${lastBuy[0].price}
+${lastBuy[0].name}
+سعر العطر: ₪${price}
+المجموع الكلي شامل التوصيل: ₪${total}
 
 ملاحظات:
 ${notesText}`;
