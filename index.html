@@ -1,106 +1,334 @@
-<!-- العنوان الأساسي -->
-<h2 style="text-align:center; font-size:28px; margin-top:40px; font-weight:bold;">
-  عطورنا
-</h2>
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" type="image/png" href="a36ebfe7-5522-44bd-8826-e6e29773395d.jpg">
+<title>Q Luxury</title>
 
-<!-- عنوان اختيار الحجم -->
-<h3 style="text-align:center; font-size:22px; margin-top:10px; font-weight:600;">
-  اختر حجم العلبة
-</h3>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&family=Cairo:wght@400;700&display=swap" rel="stylesheet">
 
-<!-- أزرار الاختيار -->
-<div style="display:flex; justify-content:center; gap:20px; margin-top:15px;">
+<style>
+body {
+    font-family: "Tajawal", sans-serif;
+    background: #faf7f2;
+    margin: 0;
+    padding: 15px;
+    color: #333;
+}
 
-  <button id="btn100" 
-    style="
-      padding:15px 30px;
-      font-size:20px;
-      font-weight:bold;
-      border-radius:12px;
-      border:none;
-      cursor:pointer;
-      background:#000;
-      color:white;
-      transition:0.3s;">
-    100ML
-  </button>
+h2 { text-align: center; font-size: 28px; margin: 20px 0; font-weight: 700; }
 
-  <button id="btn50" 
-    style="
-      padding:15px 30px;
-      font-size:20px;
-      font-weight:bold;
-      border-radius:12px;
-      border:none;
-      cursor:pointer;
-      background:#e4e4e4;
-      color:black;
-      transition:0.3s;">
-    50ML
-  </button>
+.product {
+    background: #fff;
+    padding: 18px;
+    margin-bottom: 22px;
+    border-radius: 20px;
+    box-shadow: 0 4px 10px #00000015;
+    transition: 0.3s;
+}
+.product:hover { transform: translateY(-4px); box-shadow: 0 6px 14px #00000025; }
+.product img { width: 100%; border-radius: 15px; }
+.product h3 { font-size: 22px; margin: 10px 0; }
+.product p { color: #555; font-size: 16px; margin-bottom: 8px; }
 
+.buyNowBtn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    background: #0d0d0d;
+    color: white;
+    width: 100%;
+    padding: 14px;
+    border-radius: 14px;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+    transition: 0.25s;
+}
+.buyNowBtn:hover { background: #333; transform: scale(1.03); }
+.buyNowBtn svg { width: 22px; fill: #fff; }
+
+#checkoutPage {
+    background: white;
+    padding: 22px;
+    border-radius: 22px;
+    margin-top: 20px;
+    box-shadow: 0 4px 15px #00000020;
+    display: none;
+}
+#checkoutPage h2 { font-size: 26px; }
+
+input, textarea, select {
+    width: 100%;
+    padding: 14px;
+    margin: 10px 0;
+    border-radius: 12px;
+    font-size: 18px;
+    border: 1px solid #ddd;
+    transition: 0.25s;
+}
+input:focus, textarea:focus, select:focus { border-color: #000; }
+
+/* ------- additions for size selector (minimal & safe) ------- */
+.size-title {
+  text-align: center;
+  font-size: 20px;
+  font-weight: 700;
+  margin: 4px 0 10px 0;
+  color: #222;
+}
+
+.size-filter {
+  display: flex;
+  justify-content: center;
+  gap: 14px;
+  margin-bottom: 18px;
+  flex-wrap: wrap;
+}
+
+.size-btn {
+  padding: 12px 26px;
+  border-radius: 12px;
+  border: 2px solid transparent;
+  font-size: 18px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: 0.18s;
+  background: #efefef;
+  color: #111;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+}
+.size-btn:hover { transform: translateY(-3px); }
+.size-btn.active {
+  background: #000;
+  color: #fff;
+  border-color: #000;
+}
+/* keep responsive behavior as original */
+@media (min-width: 700px) {
+    body { width: 600px; margin: auto; }
+}
+</style>
+</head>
+
+<body>
+
+<h2>🛍️ عطورنا</h2>
+
+<!-- ====== size selector (inserted exactly under the h2, minimal change) ====== -->
+<div class="size-title">اختر حجم العلبة</div>
+<div class="size-filter" aria-hidden="false">
+  <button id="size100" class="size-btn" type="button">100ml</button>
+  <button id="size50" class="size-btn" type="button">50ml</button>
 </div>
+<!-- ====== end selector ====== -->
 
-<!-- مكان عرض المنتجات -->
-<div id="productsContainer" style="margin-top:40px;"></div>
+<div id="products"></div>
 
+<div id="checkoutPage">
+    <h2>إتمام الطلب</h2>
+
+    <h3 id="prodName" style="text-align:center; margin-bottom: 10px; color:#000"></h3>
+    <h3 id="prodPrice" style="text-align:center; margin-top:-10px; color:#444"></h3>
+
+    <label>المنطقة:</label>
+    <select id="region" onchange="updateCheckout()">
+        <option value="none">اختر المنطقة</option>
+        <option value="westbank">الضفة — ₪20</option>
+        <option value="jerusalem">القدس — ₪30</option>
+        <option value="inside48">الداخل — ₪70</option>
+    </select>
+
+    <label>العنوان بالتفصيل:</label>
+    <input type="text" id="address">
+    
+    <label>الاسم الكامل:</label>
+    <input type="text" id="fullname">
+
+    <label>رقم الهاتف:</label>
+    <input type="text" id="phone">
+
+    <label>ملاحظات:</label>
+    <textarea id="notes"></textarea>
+
+    <h3 id="checkoutTotal" style="text-align:center;"></h3>
+
+    <button onclick="sendOrder()" class="buyNowBtn">
+        إرسال الطلب
+        <svg viewBox="0 0 512 512"><path d="M476 3L12 217c-16 7-15 30 1 36l111 40 41 111c6 16 29 17 36 1L476 36c7-17-11-35-28-28zM175 319l17 48 32-72 137-137c6-6 6-16 0-22s-16-6-22 0L202 273l-74-27 347-157-300 230z"/></svg>
+    </button>
+</div>
 
 <script>
 let products = [];
-let currentSize = "100ml"; // الحجم الافتراضي عند فتح الموقع
+let currentSize = "100ml"; // default on load
 
-// جلب ملف المنتجات
+// fetch products.json (supports both old flat format and new 'options' format)
 fetch("products.json")
   .then(res => res.json())
   .then(data => {
-    products = data;
-    displayProducts(currentSize);
+      products = data;
+      // ensure default button state and load products
+      setActiveSizeButton(currentSize);
+      loadProducts();
+  })
+  .catch(err => {
+      console.error("Failed to load products.json:", err);
   });
 
-// دالة عرض المنتجات حسب الحجم
-function displayProducts(size) {
-  currentSize = size;
-  const container = document.getElementById("productsContainer");
-  container.innerHTML = "";
+function setActiveSizeButton(size){
+  const btn100 = document.getElementById("size100");
+  const btn50 = document.getElementById("size50");
+  if(!btn100 || !btn50) return;
+  if(size === "100ml"){
+    btn100.classList.add("active");
+    btn50.classList.remove("active");
+  } else {
+    btn50.classList.add("active");
+    btn100.classList.remove("active");
+  }
+}
 
-  products.forEach(item => {
-    const option = item.options.find(o => o.size === size);
+// attach button handlers (only these lines added — everything else preserved)
+document.getElementById("size100").addEventListener("click", () => {
+  currentSize = "100ml";
+  setActiveSizeButton(currentSize);
+  loadProducts();
+});
+document.getElementById("size50").addEventListener("click", () => {
+  currentSize = "50ml";
+  setActiveSizeButton(currentSize);
+  loadProducts();
+});
 
-    if (option) {
-      container.innerHTML += `
-        <div style="
-          background:#fff;
-          padding:20px;
-          border-radius:15px;
-          margin-bottom:25px;
-          box-shadow:0 4px 10px rgba(0,0,0,0.1);
-          text-align:center;">
-          
-          <img src="${option.img}" style="width:200px; border-radius:10px; margin-bottom:15px;">
-          
-          <h3 style="font-size:22px; font-weight:bold;">${item.name}</h3>
-          <p style="font-size:15px; color:#555; margin:10px 0;">${option.desc}</p>
-          
-          <p style="font-size:20px; font-weight:bold; margin-top:10px;">${option.price}₪</p>
+// Modified loadProducts: minimal change so it filters by size but keeps original rendering structure and buyNow behavior.
+function loadProducts(){
+    const box = document.getElementById("products");
+    box.innerHTML = "";
 
-        </div>
-      `;
+    products.forEach((p, i)=>{
+        // Determine which display data to use:
+        // - if p.options exists (your new JSON), find matching size option
+        // - else if p.size exists (older format), check that
+        // - else assume item itself (no size) and show it
+        let display = null;
+        if (Array.isArray(p.options)) {
+            display = p.options.find(o => o.size === currentSize);
+        } else if (p.size) {
+            // single-size product (older format)
+            if (String(p.size) === currentSize.replace("ml","")) {
+                display = p;
+            }
+        } else {
+            // no size info: show only when currentSize is 100ml (default) to avoid hiding everything unexpectedly
+            // but still allow showing if product has no options
+            display = p;
+        }
+
+        if (!display) return; // skip this product for current size
+
+        // keep exactly same product card structure and buy button behavior
+        box.innerHTML += `
+            <div class="product">
+                <img src="${display.img || p.img || ''}" alt="${p.name}">
+                <h3>${p.name}</h3>
+                <p>${display.desc || p.desc || ''}</p>
+                <p><b>₪${display.price !== undefined ? display.price : (p.price !== undefined ? p.price : '')}</b></p>
+
+                <button class="buyNowBtn" onclick="buyNow(${i})">
+                    <svg viewBox="0 0 24 24"><path d="M7 4h-2l-1 2h2l3.6 7.59-1.35 2.44c-.16.28-.25.61-.25.97 0 1.1.9 2 2 2h10v-2h-10l1.1-2h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49c.08-.14.12-.31.12-.48 0-.55-.45-1-1-1h-16.31l-.94-2zm-3 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2zm14 0c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z"/></svg>
+                    شراء الآن
+                </button>
+            </div>
+        `;
+    });
+}
+
+// lastBuy will store a simple object: { name, price } to be compatible with both formats
+let lastBuy = [];
+function buyNow(i){
+    // i is index in original products array
+    const prod = products[i];
+    if(!prod) return;
+
+    // get price depending on data structure
+    let chosenPrice = null;
+    if (Array.isArray(prod.options)) {
+        const opt = prod.options.find(o => o.size === currentSize) || prod.options[0];
+        chosenPrice = opt.price;
+    } else if (prod.price !== undefined) {
+        chosenPrice = prod.price;
     }
-  });
 
-  updateButtons();
+    // set lastBuy to a minimal object used by checkout functions
+    lastBuy = [{ name: prod.name, price: chosenPrice !== null ? chosenPrice : 0 }];
+
+    openCheckout();
+
+    // إظهار اسم المنتج وسعره في صفحة الدفع
+    document.getElementById("prodName").innerHTML = lastBuy[0].name;
+    document.getElementById("prodPrice").innerHTML = "سعر العطر: ₪" + lastBuy[0].price;
 }
 
-// تفعيل الزر المختار
-function updateButtons() {
-  document.getElementById("btn100").style.background = currentSize === "100ml" ? "#000" : "#e4e4e4";
-  document.getElementById("btn100").style.color = currentSize === "100ml" ? "white" : "black";
+const shipping = { jerusalem:30, westbank:20, inside48:70 };
 
-  document.getElementById("btn50").style.background = currentSize === "50ml" ? "#000" : "#e4e4e4";
-  document.getElementById("btn50").style.color = currentSize === "50ml" ? "white" : "black";
+function openCheckout(){
+    const checkout = document.getElementById("checkoutPage");
+    checkout.style.display = "block";
+    updateCheckout();
+
+    checkout.scrollIntoView({ behavior: "smooth" });
 }
 
-// عند الضغط على أحد الأزرار
-document.getElementById("btn100").onclick = () => displayProducts("100ml");
-document.getElementById("btn50").onclick = () => displayProducts("50ml");
+function updateCheckout(){
+    const region = document.getElementById("region").value;
+    let price = Number(lastBuy[0].price);
+    let total = price;
+
+    if(region !== "none"){
+        total += shipping[region];
+    }
+
+    document.getElementById("checkoutTotal").innerHTML =
+        `سعر العطر: ₪${price}<br>المجموع الكلي شامل التوصيل: ₪${total}`;
+}
+
+function sendOrder(){
+    const name = document.getElementById("fullname").value;
+    const phoneNumber = document.getElementById("phone").value;
+    const addr = document.getElementById("address").value;
+    const region = document.getElementById("region").value;
+    const notesText = document.getElementById("notes").value;
+
+    if(!name || !phoneNumber || !addr || region === "none"){
+        alert("يرجى تعبئة جميع البيانات");
+        return;
+    }
+
+    let price = Number(lastBuy[0].price);
+    let total = price + shipping[region];
+
+    const msg = 
+`طلب جديد:
+الاسم: ${name}
+الهاتف: ${phoneNumber}
+العنوان: ${addr}
+المنطقة: ${region}
+
+المنتج:
+${lastBuy[0].name}
+سعر العطر: ₪${price}
+المجموع الكلي شامل التوصيل: ₪${total}
+
+ملاحظات:
+${notesText}`;
+
+    const waNumber = "970595479161";
+    window.location.href = "https://wa.me/" + waNumber + "?text=" + encodeURIComponent(msg);
+}
 </script>
+
+</body>
+</html>
