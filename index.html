@@ -80,6 +80,11 @@ input:focus, textarea:focus, select:focus { border-color: #000; }
 <body>
 
 <h2>🛍️ عطورنا</h2>
+    <div class="filterBox">
+    <div class="filterBtn" id="btn100" onclick="filterSize('100')">100ml</div>
+    <div class="filterBtn" id="btn50" onclick="filterSize('50')">50ml</div>
+</div>
+
 <div id="products"></div>
 
 <div id="checkoutPage">
@@ -124,6 +129,19 @@ fetch("products.json")
       products = data;
       loadProducts();
   });
+let currentFilter = "100"; // افتراضي عند فتح الموقع
+
+function filterSize(size) {
+    currentFilter = size;
+
+    // تفعيل زر
+    document.getElementById("btn100").classList.remove("active");
+    document.getElementById("btn50").classList.remove("active");
+
+    document.getElementById("btn" + size).classList.add("active");
+
+    loadProducts();
+}
 
 function loadProducts(){
     const box = document.getElementById("products");
