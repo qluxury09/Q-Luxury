@@ -71,7 +71,6 @@ input, textarea, select {
 }
 input:focus, textarea:focus, select:focus { border-color: #000; }
 
-/* ------- additions for size selector (minimal & safe) ------- */
 .size-title {
   text-align: center;
   font-size: 20px;
@@ -106,7 +105,7 @@ input:focus, textarea:focus, select:focus { border-color: #000; }
   color: #fff;
   border-color: #000;
 }
-/* keep responsive behavior as original */
+
 @media (min-width: 700px) {
     body { width: 600px; margin: auto; }
 }
@@ -117,13 +116,11 @@ input:focus, textarea:focus, select:focus { border-color: #000; }
 
 <h2>🛍️ عطورنا</h2>
 
-<!-- ====== size selector (inserted exactly under the h2, minimal change) ====== -->
 <div class="size-title">اختر حجم العلبة</div>
 <div class="size-filter" aria-hidden="false">
   <button id="size100" class="size-btn" type="button">100ml</button>
   <button id="size50" class="size-btn" type="button">50ml</button>
 </div>
-<!-- ====== end selector ====== -->
 
 <div id="products"></div>
 
@@ -163,25 +160,19 @@ input:focus, textarea:focus, select:focus { border-color: #000; }
 
 <script>
 let products = [];
-let currentSize = "100ml"; // default on load
+let currentSize = "100ml";
 
-// fetch products.json (supports both old flat format and new 'options' format)
 fetch("products.json")
   .then(res => res.json())
   .then(data => {
       products = data;
-      // ensure default button state and load products
       setActiveSizeButton(currentSize);
       loadProducts();
-  })
-  .catch(err => {
-      console.error("Failed to load products.json:", err);
   });
 
 function setActiveSizeButton(size){
   const btn100 = document.getElementById("size100");
   const btn50 = document.getElementById("size50");
-  if(!btn100 || !btn50) return;
   if(size === "100ml"){
     btn100.classList.add("active");
     btn50.classList.remove("active");
@@ -191,7 +182,6 @@ function setActiveSizeButton(size){
   }
 }
 
-// attach button handlers (only these lines added — everything else preserved)
 document.getElementById("size100").addEventListener("click", () => {
   currentSize = "100ml";
   setActiveSizeButton(currentSize);
@@ -203,33 +193,24 @@ document.getElementById("size50").addEventListener("click", () => {
   loadProducts();
 });
 
-// Modified loadProducts: minimal change so it filters by size but keeps original rendering structure and buyNow behavior.
 function loadProducts(){
     const box = document.getElementById("products");
     box.innerHTML = "";
 
     products.forEach((p, i)=>{
-        // Determine which display data to use:
-        // - if p.options exists (your new JSON), find matching size option
-        // - else if p.size exists (older format), check that
-        // - else assume item itself (no size) and show it
         let display = null;
         if (Array.isArray(p.options)) {
             display = p.options.find(o => o.size === currentSize);
         } else if (p.size) {
-            // single-size product (older format)
             if (String(p.size) === currentSize.replace("ml","")) {
                 display = p;
             }
         } else {
-            // no size info: show only when currentSize is 100ml (default) to avoid hiding everything unexpectedly
-            // but still allow showing if product has no options
             display = p;
         }
 
-        if (!display) return; // skip this product for current size
+        if (!display) return;
 
-        // keep exactly same product card structure and buy button behavior
         box.innerHTML += `
             <div class="product">
                 <img src="${display.img || p.img || ''}" alt="${p.name}">
@@ -246,14 +227,11 @@ function loadProducts(){
     });
 }
 
-// lastBuy will store a simple object: { name, price } to be compatible with both formats
 let lastBuy = [];
 function buyNow(i){
-    // i is index in original products array
     const prod = products[i];
     if(!prod) return;
 
-    // get price depending on data structure
     let chosenPrice = null;
     if (Array.isArray(prod.options)) {
         const opt = prod.options.find(o => o.size === currentSize) || prod.options[0];
@@ -262,12 +240,10 @@ function buyNow(i){
         chosenPrice = prod.price;
     }
 
-    // set lastBuy to a minimal object used by checkout functions
-    lastBuy = [{ name: prod.name, price: chosenPrice !== null ? chosenPrice : 0 }];
+    lastBuy = [{ name: prod.name, price: chosenPrice }];
 
     openCheckout();
 
-    // إظهار اسم المنتج وسعره في صفحة الدفع
     document.getElementById("prodName").innerHTML = lastBuy[0].name;
     document.getElementById("prodPrice").innerHTML = "سعر العطر: ₪" + lastBuy[0].price;
 }
@@ -278,7 +254,6 @@ function openCheckout(){
     const checkout = document.getElementById("checkoutPage");
     checkout.style.display = "block";
     updateCheckout();
-
     checkout.scrollIntoView({ behavior: "smooth" });
 }
 
@@ -310,6 +285,8 @@ function sendOrder(){
     let price = Number(lastBuy[0].price);
     let total = price + shipping[region];
 
+    const sizeLabel = currentSize;
+
     const msg = 
 `طلب جديد:
 الاسم: ${name}
@@ -318,7 +295,7 @@ function sendOrder(){
 المنطقة: ${region}
 
 المنتج:
-${lastBuy[0].name}
+${lastBuy[0].name} — ${sizeLabel}
 سعر العطر: ₪${price}
 المجموع الكلي شامل التوصيل: ₪${total}
 
