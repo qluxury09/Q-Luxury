@@ -162,6 +162,12 @@ input:focus, textarea:focus, select:focus { border-color: #000; }
 let products = [];
 let currentSize = "100ml";
 
+/* المنتجين غير المتوفرين */
+const unavailable = [
+  "Q Quantum - كيو كوانتوم",
+  "Q Aero Fresh - كيو إيرو فريش"
+];
+
 fetch("products.json")
   .then(res => res.json())
   .then(data => {
@@ -218,7 +224,7 @@ function loadProducts(){
                 <p>${display.desc || p.desc || ''}</p>
                 <p><b>₪${display.price !== undefined ? display.price : (p.price !== undefined ? p.price : '')}</b></p>
 
-                ${p.name === "Q Quantum - كيو كوانتوم" ? `
+                ${unavailable.includes(p.name) ? `
                     <button class="buyNowBtn" style="
                         background:#cfcfcf;
                         color:#000;
