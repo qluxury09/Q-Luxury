@@ -11,11 +11,11 @@
 <style>
 body {
     font-family: "Tajawal", sans-serif;
-    background: linear-gradient(180deg, #fdfbf6, #f6f1e7);
+    background: #faf7f2;
     margin: 0;
     padding: 15px;
     color: #333;
-    overflow-x: hidden;
+    overflow-x: hidden; /* لإبقاء النجوم والهلال داخل الشاشة */
 }
 
 /* 🌙 الهلال */
@@ -50,51 +50,28 @@ body {
   transition: opacity 0.5s ease;
 }
 
-h2 {
-    text-align: center;
-    font-size: 28px;
-    margin: 20px 0;
-    font-weight: 700;
-    color: #1f3d2b;
-}
+/* باقي كود CSS الأصلي */
+h2 { text-align: center; font-size: 28px; margin: 20px 0; font-weight: 700; }
 
 .product {
-    background: linear-gradient(180deg, #ffffff, #faf6ee);
+    background: #fff;
     padding: 18px;
     margin-bottom: 22px;
     border-radius: 20px;
     box-shadow: 0 4px 10px #00000015;
     transition: 0.3s;
 }
-
-.product:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 6px 14px #00000025;
-}
-
-.product img {
-    width: 100%;
-    border-radius: 15px;
-}
-
-.product h3 {
-    font-size: 22px;
-    margin: 10px 0;
-    color: #1f3d2b;
-}
-
-.product p {
-    color: #555;
-    font-size: 16px;
-    margin-bottom: 8px;
-}
+.product:hover { transform: translateY(-4px); box-shadow: 0 6px 14px #00000025; }
+.product img { width: 100%; border-radius: 15px; }
+.product h3 { font-size: 22px; margin: 10px 0; }
+.product p { color: #555; font-size: 16px; margin-bottom: 8px; }
 
 .buyNowBtn {
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 8px;
-    background: linear-gradient(135deg, #1f3d2b, #2f5d44);
+    background: #0d0d0d;
     color: white;
     width: 100%;
     padding: 14px;
@@ -104,20 +81,18 @@ h2 {
     cursor: pointer;
     transition: 0.25s;
 }
-
-.buyNowBtn:hover {
-    background: #333;
-    transform: scale(1.03);
-}
+.buyNowBtn:hover { background: #333; transform: scale(1.03); }
+.buyNowBtn svg { width: 22px; fill: #fff; }
 
 #checkoutPage {
-    background: linear-gradient(180deg, #ffffff, #faf6ee);
+    background: white;
     padding: 22px;
     border-radius: 22px;
     margin-top: 20px;
     box-shadow: 0 4px 15px #00000020;
     display: none;
 }
+#checkoutPage h2 { font-size: 26px; }
 
 input, textarea, select {
     width: 100%;
@@ -126,13 +101,16 @@ input, textarea, select {
     border-radius: 12px;
     font-size: 18px;
     border: 1px solid #ddd;
+    transition: 0.25s;
 }
+input:focus, textarea:focus, select:focus { border-color: #000; }
 
 .size-title {
   text-align: center;
   font-size: 20px;
   font-weight: 700;
-  margin: 4px 0 10px;
+  margin: 4px 0 10px 0;
+  color: #222;
 }
 
 .size-filter {
@@ -140,21 +118,29 @@ input, textarea, select {
   justify-content: center;
   gap: 14px;
   margin-bottom: 18px;
+  flex-wrap: wrap;
 }
 
 .size-btn {
   padding: 12px 26px;
   border-radius: 12px;
+  border: 2px solid transparent;
   font-size: 18px;
   font-weight: 700;
   cursor: pointer;
-  background: #f3ede3;
+  transition: 0.18s;
+  background: #efefef;
+  color: #111;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+}
+.size-btn:hover { transform: translateY(-3px); }
+.size-btn.active {
+  background: #000;
+  color: #fff;
+  border-color: #000;
 }
 
-.size-btn.active {
-  background: linear-gradient(135deg, #b08d57, #d6b77c);
-  color: #fff;
-}
+@media (min-width: 700px) { body { width: 600px; margin: auto; } }
 
 .social-float {
   position: fixed;
@@ -184,28 +170,30 @@ input, textarea, select {
 <div class="ramadan-crescent"></div>
 
 <div class="social-float">
-  <a href="https://www.instagram.com/q.luxury09" target="_blank">
-    <img src="WhatsApp Image 2026-02-09 at 8.11.29 PM.jpeg">
+  <a href="https://www.instagram.com/q.luxury09?igsh=MThzM3V3bTY2ZnoxNg%3D%3D&utm_source=qr" target="_blank">
+    <img src="WhatsApp Image 2026-02-09 at 8.11.29 PM.jpeg" alt="Instagram">
   </a>
-  <a href="https://www.tiktok.com/@q.luxury09" target="_blank">
-    <img src="WhatsApp Image 2026-02-09 at 8.15.47 PM.jpeg">
+  <a href="https://www.tiktok.com/@q.luxury09?_r=1&_t=ZS-93mewJgvedB" target="_blank">
+    <img src="WhatsApp Image 2026-02-09 at 8.15.47 PM.jpeg" alt="TikTok">
   </a>
 </div>
 
 <h2>🛍️ عطورنا</h2>
 
 <div class="size-title">اختر حجم العلبة</div>
-<div class="size-filter">
+<div class="size-filter" aria-hidden="false">
   <button id="size100" class="size-btn" type="button">100ml</button>
   <button id="size50" class="size-btn" type="button">50ml</button>
+  <button id="size30" class="size-btn" type="button">30ml</button>
 </div>
 
 <div id="products"></div>
 
 <div id="checkoutPage">
     <h2>إتمام الطلب</h2>
-    <h3 id="prodName" style="text-align:center;"></h3>
-    <h3 id="prodPrice" style="text-align:center;"></h3>
+
+    <h3 id="prodName" style="text-align:center; margin-bottom: 10px; color:#000"></h3>
+    <h3 id="prodPrice" style="text-align:center; margin-top:-10px; color:#444"></h3>
 
     <label>المنطقة:</label>
     <select id="region" onchange="updateCheckout()">
@@ -215,98 +203,114 @@ input, textarea, select {
         <option value="inside48">الداخل — ₪70</option>
     </select>
 
-    <label>العنوان:</label>
-    <input id="address">
+    <label>العنوان بالتفصيل:</label>
+    <input type="text" id="address">
+    
+    <label>الاسم الكامل:</label>
+    <input type="text" id="fullname">
 
-    <label>الاسم:</label>
-    <input id="fullname">
-
-    <label>الهاتف:</label>
-    <input id="phone">
+    <label>رقم الهاتف:</label>
+    <input type="text" id="phone">
 
     <label>ملاحظات:</label>
     <textarea id="notes"></textarea>
 
     <h3 id="checkoutTotal" style="text-align:center;"></h3>
 
-    <button onclick="sendOrder()" class="buyNowBtn">إرسال الطلب</button>
+    <button onclick="sendOrder()" class="buyNowBtn">
+        إرسال الطلب
+    </button>
 </div>
 
 <script>
 let products = [];
 let currentSize = "100ml";
-const unavailable = ["Q Quantum - كيو كوانتوم","Q Aero Fresh - كيو إيرو فريش"];
+const unavailable = ["Q Quantum - كيو كوانتوم", "Q Aero Fresh - كيو إيرو فريش"];
 
 fetch("products.json")
-.then(res => res.json())
-.then(data => {
-    products = data;
-    setActiveSizeButton(currentSize);
-    loadProducts();
-});
+  .then(res => res.json())
+  .then(data => {
+      products = data;
+      setActiveSizeButton(currentSize);
+      loadProducts();
+  });
 
 function setActiveSizeButton(size){
-  document.getElementById("size100").classList.toggle("active", size==="100ml");
-  document.getElementById("size50").classList.toggle("active", size==="50ml");
+  const btn100 = document.getElementById("size100");
+  const btn50 = document.getElementById("size50");
+  const btn30 = document.getElementById("size30");
+  btn100.classList.toggle("active", size === "100ml");
+  btn50.classList.toggle("active", size === "50ml");
+  btn30?.classList.toggle("active", size === "30ml");
 }
 
-document.getElementById("size100").onclick = () => { currentSize="100ml"; setActiveSizeButton(currentSize); loadProducts(); };
-document.getElementById("size50").onclick = () => { currentSize="50ml"; setActiveSizeButton(currentSize); loadProducts(); };
+document.getElementById("size100").addEventListener("click", () => { currentSize = "100ml"; setActiveSizeButton(currentSize); loadProducts(); });
+document.getElementById("size50").addEventListener("click", () => { currentSize = "50ml"; setActiveSizeButton(currentSize); loadProducts(); });
+document.getElementById("size30")?.addEventListener("click", () => { currentSize = "30ml"; setActiveSizeButton(currentSize); loadProducts(); });
 
 function loadProducts(){
     const box = document.getElementById("products");
     box.innerHTML = "";
-    products.forEach((p,i)=>{
-        let display = p.options?.find(o=>o.size===currentSize) || p;
+
+    products.forEach((p, i)=>{
+        let display = p.options?.find(o => o.size === currentSize) || p;
         if(!display) return;
+
         box.innerHTML += `
-        <div class="product">
-          <img src="${display.img || p.img}">
-          <h3>${p.name}</h3>
-          <p>${display.desc||""}</p>
-          <p><b>₪${display.price}</b></p>
-          ${unavailable.includes(p.name) ? `<button class="buyNowBtn" style="background:#ccc;color:#000;pointer-events:none">غير متوفر</button>` : `<button class="buyNowBtn" onclick="buyNow(${i})">شراء الآن</button>`}
-        </div>`;
+            <div class="product">
+                <img src="${display.img || p.img || ''}" alt="${p.name}">
+                <h3>${p.name}</h3>
+                <p>${display.desc || p.desc || ''}</p>
+                <p><b>₪${display.price !== undefined ? display.price : (p.price !== undefined ? p.price : '')}</b></p>
+
+                ${unavailable.includes(p.name) ? `<button class="buyNowBtn" style="background:#cfcfcf;color:#000;cursor:not-allowed;pointer-events:none">غير متوفر الآن</button>` : `<button class="buyNowBtn" onclick="buyNow(${i})">شراء الآن</button>`}
+            </div>
+        `;
     });
 }
 
-let lastBuy=[];
+let lastBuy = [];
 function buyNow(i){
-  const p = products[i];
-  const opt = p.options?.find(o=>o.size===currentSize)||p;
-  lastBuy=[{name:p.name,price:opt.price}];
-  document.getElementById("prodName").innerText=p.name;
-  document.getElementById("prodPrice").innerText="₪"+opt.price;
-  document.getElementById("checkoutPage").style.display="block";
-  document.getElementById("checkoutPage").scrollIntoView({behavior:"smooth"});
-  updateCheckout();
+    const prod = products[i];
+    if(!prod) return;
+    const chosenPrice = prod.options?.find(o => o.size === currentSize)?.price || prod.price;
+    lastBuy = [{ name: prod.name, price: chosenPrice }];
+    openCheckout();
+    document.getElementById("prodName").innerText = lastBuy[0].name;
+    document.getElementById("prodPrice").innerText = "سعر العطر: ₪" + lastBuy[0].price;
 }
 
-const shipping={westbank:20,jerusalem:30,inside48:70};
+const shipping = { jerusalem:30, westbank:20, inside48:70 };
+
+function openCheckout(){
+    const checkout = document.getElementById("checkoutPage");
+    checkout.style.display = "block";
+    updateCheckout();
+    checkout.scrollIntoView({ behavior: "smooth" });
+}
+
 function updateCheckout(){
-  const r=document.getElementById("region").value;
-  let t=lastBuy[0].price+(shipping[r]||0);
-  document.getElementById("checkoutTotal").innerHTML="المجموع: ₪"+t;
+    const region = document.getElementById("region").value;
+    let price = Number(lastBuy[0].price);
+    let total = price + (shipping[region] || 0);
+    document.getElementById("checkoutTotal").innerHTML = `سعر العطر: ₪${price}<br>المجموع الكلي شامل التوصيل: ₪${total}`;
 }
 
 function sendOrder(){
-  const name = document.getElementById("fullname").value;
-  const phone = document.getElementById("phone").value;
-  const addr = document.getElementById("address").value;
-  const region = document.getElementById("region").value;
-  const notes = document.getElementById("notes").value;
+    const name = document.getElementById("fullname").value;
+    const phoneNumber = document.getElementById("phone").value;
+    const addr = document.getElementById("address").value;
+    const region = document.getElementById("region").value;
+    const notesText = document.getElementById("notes").value;
 
-  if(!name || !phone || !addr || region === "none"){
-    alert("يرجى تعبئة جميع البيانات");
-    return;
-  }
+    if(!name || !phoneNumber || !addr || region === "none"){ alert("يرجى تعبئة جميع البيانات"); return; }
 
-  const price = Number(lastBuy[0].price);
-  const total = price + shipping[region];
+    const price = Number(lastBuy[0].price);
+    const total = price + shipping[region];
 
-  const msg = `طلب جديد:
+    const msg = `طلب جديد:
 الاسم: ${name}
-الهاتف: ${phone}
+الهاتف: ${phoneNumber}
 العنوان: ${addr}
 المنطقة: ${region}
 
@@ -319,8 +323,8 @@ ${lastBuy[0].name}
 ملاحظات:
 ${notes}`;
 
-  const waNumber = "970595479161";
-  window.location.href = "https://wa.me/" + waNumber + "?text=" + encodeURIComponent(msg);
+    const waNumber = "970595479161";
+    window.location.href = "https://wa.me/" + waNumber + "?text=" + encodeURIComponent(msg);
 }
 
 /* ⭐ نجوم متحركة */
