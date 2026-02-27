@@ -241,12 +241,12 @@ function setActiveSizeButton(size){
   const btn30 = document.getElementById("size30");
   btn100.classList.toggle("active", size === "100ml");
   btn50.classList.toggle("active", size === "50ml");
-  btn30?.classList.toggle("active", size === "30ml");
+  btn30?.classList.toggle("active", size === "35ml");
 }
 
 document.getElementById("size100").addEventListener("click", () => { currentSize = "100ml"; setActiveSizeButton(currentSize); loadProducts(); });
 document.getElementById("size50").addEventListener("click", () => { currentSize = "50ml"; setActiveSizeButton(currentSize); loadProducts(); });
-document.getElementById("size30")?.addEventListener("click", () => { currentSize = "30ml"; setActiveSizeButton(currentSize); loadProducts(); });
+document.getElementById("size35")?.addEventListener("click", () => { currentSize = "35ml"; setActiveSizeButton(currentSize); loadProducts(); });
 
 function loadProducts(){
     const box = document.getElementById("products");
