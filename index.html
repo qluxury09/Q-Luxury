@@ -212,7 +212,7 @@ input:focus, textarea:focus, select:focus { border-color: #000; }
     <label>رقم الهاتف:</label>
     <input type="text" id="phone">
 
-    <label>ملاحظات:</label>
+   <label>ملاحظات:</label>
     <textarea id="notes"></textarea>
 
     <h3 id="checkoutTotal" style="text-align:center;"></h3>
@@ -321,7 +321,7 @@ ${lastBuy[0].name}
 المجموع الكلي شامل التوصيل: ₪${total}
 
 ملاحظات:
-${notes}`;
+${notesText}`;
 
     const waNumber = "970595479161";
     window.location.href = "https://wa.me/" + waNumber + "?text=" + encodeURIComponent(msg);
