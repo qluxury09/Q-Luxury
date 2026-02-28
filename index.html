@@ -11,11 +11,11 @@
 <style>
 body {
     font-family: "Tajawal", sans-serif;
-    background: #faf7f2;
+    background: linear-gradient(180deg, #0f0f0f, #1a1a1a);
     margin: 0;
     padding: 15px;
-    color: #333;
-    overflow-x: hidden; /* لإبقاء النجوم والهلال داخل الشاشة */
+    color: #ffffff;
+    overflow-x: hidden;
 }
 
 /* 🌙 الهلال */
@@ -26,73 +26,88 @@ body {
   width: 70px;
   height: 70px;
   border-radius: 50%;
-  box-shadow: -12px 0 0 4px #c6a55c, 0 0 15px rgba(198,165,92,0.4);
+  box-shadow: -12px 0 0 4px #c6a55c, 0 0 20px rgba(198,165,92,0.4);
   animation: crescentFloat 6s ease-in-out infinite;
   opacity: 0.9;
   z-index: 999;
 }
 
-@keyframes crescentFloat {
-  0% { transform: translateY(0); }
-  50% { transform: translateY(-8px); }
-  100% { transform: translateY(0); }
-}
-
-/* ⭐ نجوم متحركة */
+/* ⭐ نجوم */
 .ramadan-star {
   position: fixed;
   color: #c6a55c;
   pointer-events: none;
   z-index: 900;
-  opacity: 0.6;
+  opacity: 0.7;
   text-shadow: 0 0 6px #c6a55c, 0 0 14px rgba(198,165,92,0.6);
   user-select: none;
-  transition: opacity 0.5s ease;
 }
 
-/* باقي كود CSS الأصلي */
-h2 { text-align: center; font-size: 28px; margin: 20px 0; font-weight: 700; }
+h2 {
+    text-align: center;
+    font-size: 28px;
+    margin: 20px 0;
+    font-weight: 700;
+    color: #c6a55c;
+}
 
 .product {
-    background: #fff;
+    background: linear-gradient(180deg, #1a1a1a, #141414);
     padding: 18px;
     margin-bottom: 22px;
     border-radius: 20px;
-    box-shadow: 0 4px 10px #00000015;
+    border: 1px solid #2a2a2a;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.6);
     transition: 0.3s;
 }
-.product:hover { transform: translateY(-4px); box-shadow: 0 6px 14px #00000025; }
-.product img { width: 100%; border-radius: 15px; }
-.product h3 { font-size: 22px; margin: 10px 0; }
-.product p { color: #555; font-size: 16px; margin-bottom: 8px; }
+
+.product:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 6px 25px rgba(198,165,92,0.2);
+}
+
+.product h3 {
+    font-size: 22px;
+    margin: 10px 0;
+    color: #ffffff;
+}
+
+.product p {
+    color: #c9c9c9;
+    font-size: 16px;
+}
 
 .buyNowBtn {
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 8px;
-    background: #0d0d0d;
-    color: white;
+    background: linear-gradient(135deg, #c6a55c, #a67c2d);
+    color: #000;
     width: 100%;
     padding: 14px;
     border-radius: 14px;
     border: none;
     font-size: 20px;
+    font-weight: 700;
     cursor: pointer;
-    transition: 0.25s;
+    transition: 0.3s;
 }
-.buyNowBtn:hover { background: #333; transform: scale(1.03); }
-.buyNowBtn svg { width: 22px; fill: #fff; }
+
+.buyNowBtn:hover {
+    background: linear-gradient(135deg, #d4b26a, #b88a35);
+    transform: scale(1.03);
+}
 
 #checkoutPage {
-    background: white;
+    background: linear-gradient(180deg, #1a1a1a, #141414);
     padding: 22px;
     border-radius: 22px;
     margin-top: 20px;
-    box-shadow: 0 4px 15px #00000020;
+    border: 1px solid #2a2a2a;
+    box-shadow: 0 4px 25px rgba(0,0,0,0.6);
     display: none;
 }
-#checkoutPage h2 { font-size: 26px; }
 
 input, textarea, select {
     width: 100%;
@@ -100,66 +115,49 @@ input, textarea, select {
     margin: 10px 0;
     border-radius: 12px;
     font-size: 18px;
-    border: 1px solid #ddd;
-    transition: 0.25s;
+    background: #111;
+    color: #fff;
+    border: 1px solid #2a2a2a;
 }
-input:focus, textarea:focus, select:focus { border-color: #000; }
+
+input:focus, textarea:focus, select:focus {
+    border-color: #c6a55c;
+    outline: none;
+}
 
 .size-title {
   text-align: center;
   font-size: 20px;
   font-weight: 700;
-  margin: 4px 0 10px 0;
-  color: #222;
-}
-
-.size-filter {
-  display: flex;
-  justify-content: center;
-  gap: 14px;
-  margin-bottom: 18px;
-  flex-wrap: wrap;
+  margin: 4px 0 10px;
+  color: #c6a55c;
 }
 
 .size-btn {
   padding: 12px 26px;
   border-radius: 12px;
-  border: 2px solid transparent;
   font-size: 18px;
   font-weight: 700;
   cursor: pointer;
-  transition: 0.18s;
-  background: #efefef;
-  color: #111;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.06);
-}
-.size-btn:hover { transform: translateY(-3px); }
-.size-btn.active {
-  background: #000;
+  background: #1a1a1a;
   color: #fff;
-  border-color: #000;
+  border: 1px solid #2a2a2a;
+  transition: 0.3s;
 }
 
-@media (min-width: 700px) { body { width: 600px; margin: auto; } }
+.size-btn:hover {
+  border-color: #c6a55c;
+}
 
-.social-float {
-  position: fixed;
-  left: 14px;
-  bottom: 18px;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  z-index: 9999;
+.size-btn.active {
+  background: linear-gradient(135deg, #c6a55c, #a67c2d);
+  color: #000;
+  border-color: #c6a55c;
 }
 
 .social-float img {
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  object-fit: contain;
-  padding: 6px;
-  background: #fff;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+  background: #1a1a1a;
+  border: 1px solid #2a2a2a;
 }
 </style>
 </head>
